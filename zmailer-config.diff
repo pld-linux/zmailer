@@ -22,7 +22,7 @@ diff -Nur zmailer-2.99.55.orig/proto/cf/SMTP+UUCP.cf.in zmailer-2.99.55/proto/cf
  PS1=z$PS1
  #
  # Configure error logging (squirrel)
-@@ -76,44 +76,14 @@
+@@ -76,44 +76,16 @@
  . server.cf
  
  mailconf () {
@@ -50,7 +50,7 @@ diff -Nur zmailer-2.99.55.orig/proto/cf/SMTP+UUCP.cf.in zmailer-2.99.55/proto/cf
 -
 -	# This is what it will say on out mail
 -	mydomain=$hostname
-+	orgdomain=$(/bin/hostname --doman)
++	orgdomain=$(/bin/hostname --domain)
 +	hostname=$(/bin/hostname --fqdn)
 +	read mydomain </etc/mail/mailname
  }
@@ -69,6 +69,8 @@ diff -Nur zmailer-2.99.55.orig/proto/cf/SMTP+UUCP.cf.in zmailer-2.99.55/proto/cf
 -fi
 +mailconf
 +provide siteinfo
++provide standard
++
  [ "$orgdomains" = x ] && orgdomains=$orgdomain
  
  # set hostname to enable message-id generation and checking
