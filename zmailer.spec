@@ -2,7 +2,7 @@ Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
 Version:	2.99.51
-Release:	2
+Release:	3
 License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
@@ -105,7 +105,8 @@ rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
 	$RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d} \
-	$RPM_BUILD_ROOT/{var/mail,usr/sbin}
+	$RPM_BUILD_ROOT/{var/mail,usr/sbin} \
+	$RPM_BUILD_ROOT/var/log/archiv/mail
 
 # Install main files
 %{__make} install \
@@ -291,6 +292,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(1777,root,root) %dir /var/mail
 
 %attr(750,root,root) %dir /var/log/mail
+%attr(750,root,root) %dir /var/log/archiv/mail
 
 %doc ChangeLog Overview README README.PERFORMANCE README.SPAM
 %doc doc/guides doc/toplevel-domains doc/manual/FAQ utils/usenet/usenet.sh
