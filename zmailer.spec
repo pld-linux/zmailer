@@ -1,11 +1,12 @@
 Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
-Version:	2.99.51
-Release:	3
+Version:	2.99.54
+Release:	1
 License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
+Group(de):	Netzwerkwesen/Server
 Group(pl):	Sieciowe/Serwery
 Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
 Source1:	%{name}-pl.txt
@@ -13,22 +14,28 @@ Source2:	forms-pl-0.4.tar.gz
 Source3:	%{name}.logrotate
 Patch0:		%{name}-config.diff
 Patch1:		%{name}-libwrap.patch
-Prereq:		/sbin/chkconfig
-Prereq:		%{_sbindir}/groupadd
-Prereq:		%{_sbindir}/groupdel
-URL:		http://www.zmailer.org
-Requires:	logrotate >= 2.4
-Requires:	/etc/cron.d
-Requires:	whoson >= 1.08
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel
 BuildRequires:	whoson-devel
 BuildRequires:	openldap-devel
 BuildRequires:	glibc-devel >= 2.1
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+URL:		http://www.zmailer.org
+Requires:	logrotate >= 2.4
+Requires:	/etc/cron.d
+Requires:	whoson >= 1.08
+Prereq:		/sbin/chkconfig
+Prereq:		%{_sbindir}/groupadd
+Prereq:		%{_sbindir}/groupdel
 Provides:	smtpdaemon
-Obsoletes:	smtpdaemon
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	exim
+Obsoletes:	postfix
+Obsoletes:	sendmail
+Obsoletes:	sendmail-cf
+Obsoletes:	sendmail-doc
+Obsoletes:	smail
+Obsoletes:	smtpdaemon
+Obsoletes:	qmail
 
 %description
 This is a package that implements an internet message transfer agent
@@ -54,6 +61,7 @@ oraz TLS.
 Summary:	Static library and header file for zmailer
 Summary(pl):	Plik nag³ówkowy i biblioteka statyczna dla zmailera
 Group:		Development/Libraries
+Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name} = %{version}
@@ -75,10 +83,7 @@ statyczn± ZMailera.
 %build
 autoconf
 ZCONFIG=%{_sysconfdir}/mail/zmailer.conf \
-./configure %{_target_platform} \
-	--mandir=%{_mandir} \
-	--libdir=%{_libdir} \
-	--prefix=%{_libdir}/zmailer \
+%configure
 	--with-postoffice=/var/spool/postoffice \
 	--with-rmailpath=%{_bindir}/rmail \
 	--with-nntpserver=news \
@@ -88,7 +93,6 @@ ZCONFIG=%{_sysconfdir}/mail/zmailer.conf \
 	--with-mailbin=%{_libdir}/zmailer \
 	--with-mailvar=%{_sysconfdir}/mail \
 	--with-ta-mmap \
-	--includedir=%{_includedir} \
 	--with-whoson \
 	--with-ldap-prefix \
 	--with-openssl-prexix=%{_prefix} \
@@ -97,6 +101,7 @@ ZCONFIG=%{_sysconfdir}/mail/zmailer.conf \
 	--with-mailbox=/var/mail
 #	--with-yp \
 #	--with-yp-lib='-lyp'
+#	--prefix=%{_libdir}/zmailer \
 
 %{__make} COPTS="$RPM_OPT_FLAGS -w" all
 
@@ -104,7 +109,7 @@ ZCONFIG=%{_sysconfdir}/mail/zmailer.conf \
 rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
-	$RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d} \
+	$RPM_BUILD_ROOT%{_sysconfdir}/{cron.d,logrotate.d,rc.d/init.d} \
 	$RPM_BUILD_ROOT/{var/mail,usr/sbin} \
 	$RPM_BUILD_ROOT/var/log/archiv/mail
 
@@ -133,7 +138,7 @@ ln -fs ../lib/zmailer/sendmail		$RPM_BUILD_ROOT%{_sbindir}/sendmail
 %{__make} -C man S=../man MANDIR=$RPM_BUILD_ROOT%{_mandir} install
 
 # To avoid conflict with INN
-mv $RPM_BUILD_ROOT%{_mandir}/man8/sm.8 $RPM_BUILD_ROOT%{_mandir}/man8/sm-zmailer.8
+mv -f $RPM_BUILD_ROOT%{_mandir}/man8/sm.8 $RPM_BUILD_ROOT%{_mandir}/man8/sm-zmailer.8
 
 # Install Polish/English forms
 cd forms*
@@ -152,8 +157,8 @@ for x in *; do cp $x ..; done
 touch $RPM_BUILD_ROOT%{_sysconfdir}/mail/aliases
 
 # Remove unnecesary proto and bak files
-rm -r `find $RPM_BUILD_ROOT -name proto`
-rm -r `find $RPM_BUILD_ROOT -name bak`
+rm -rf `find $RPM_BUILD_ROOT -name proto`
+rm -rf `find $RPM_BUILD_ROOT -name bak`
 
 # Install another files
 cat  << EOF > $RPM_BUILD_ROOT/etc/cron.d/zmailer
@@ -169,10 +174,7 @@ install %{SOURCE3} $RPM_BUILD_ROOT/etc/logrotate.d/zmailer
 
 # Router configuration
 cp -f $RPM_BUILD_ROOT%{_sysconfdir}/mail/cf/SMTP+UUCP.cf \
-$RPM_BUILD_ROOT%{_sysconfdir}/mail/router.cf
-
-strip     $RPM_BUILD_ROOT%{_libdir}/zmailer/{*,ta}	2>/dev/null || :
-gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/*
+	$RPM_BUILD_ROOT%{_sysconfdir}/mail/router.cf
 
 %post
 umask 022
@@ -187,10 +189,10 @@ fi
 if [ ! -L /etc/mail/db/aliases ]; then
 	if [ -f /etc/mail/aliases ]; then
 		echo "Generating Symlink to use /etc/mail/aliases for aliasing"
-		rm /etc/mail/db/aliases || echo "Dziwnie pusto w (Strange nothing at) /etc/mail/db/aliases. Ale nie martw siê ... (But dont worry..)"
+		rm -f /etc/mail/db/aliases || echo "Dziwnie pusto w (Strange nothing at) /etc/mail/db/aliases. Ale nie martw siê ... (But dont worry..)"
 	else
 		echo "Installing new /etc/mail/aliases from zmailer sample"
-		mv /etc/mail/db/aliases /etc/aliases
+		mv -f /etc/mail/db/aliases /etc/aliases
 	fi
 	ln -s ../aliases /etc/mail/db/aliases
 fi
@@ -230,7 +232,7 @@ fi
 
 rm -f /var/spool/postoffice/.pid.*
     
-if [ "$1" = 0 ]; then
+if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del zmailer
 	rm -f /var/log/mail/*
 fi
@@ -243,7 +245,7 @@ if ! grep -q "^zmailer:" /etc/group; then
 fi
 
 %postun
-if [ $1 = 0 ]; then
+if [ "$1" = "0" ]; then
 	%{_sbindir}/groupdel zmailer 2> /dev/null
 fi
 
