@@ -12,8 +12,6 @@ Release:	3
 License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
-Group(de):	Netzwerkwesen/Server
-Group(pl):	Sieciowe/Serwery
 Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
 Source1:	%{name}-pl.txt
 Source2:	forms-pl-0.4.tar.gz
@@ -78,13 +76,6 @@ oraz TLS.
 Summary:	Static library and header file for zmailer
 Summary(pl):	Plik nagЁСwkowy i biblioteka statyczna dla zmailera
 Group:		Development/Libraries
-Group(de):	Entwicklung/Libraries
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	Разработка/Библиотеки
-Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name} = %{version}
 
 %description devel
