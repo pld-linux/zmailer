@@ -2,7 +2,7 @@ Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
 Version:	2.99.54
-Release:	1
+Release:	2
 License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
@@ -19,7 +19,7 @@ BuildRequires:	openssl-devel
 BuildRequires:	whoson-devel
 BuildRequires:	openldap-devel
 BuildRequires:	glibc-devel >= 2.1
-URL:		http://www.zmailer.org
+URL:		http://www.zmailer.org/
 Requires:	logrotate >= 2.4
 Requires:	/etc/cron.d
 Requires:	whoson >= 1.08
@@ -103,7 +103,7 @@ ZCONFIG=%{_sysconfdir}/mail/zmailer.conf \
 #	--with-yp-lib='-lyp'
 #	--prefix=%{_libdir}/zmailer \
 
-%{__make} COPTS="$RPM_OPT_FLAGS -w" all
+%{__make} COPTS="%{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS} -w" all
 
 %install
 rm -rf $RPM_BUILD_ROOT
