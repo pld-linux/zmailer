@@ -93,7 +93,7 @@ statyczn± ZMailera.
 %patch2 -p1
 
 %build
-autoconf
+%{__autoconf}
 %configure \
 	--with-zconfig=%{_sysconfdir}/mail/zmailer.conf \
 	--with-postoffice=/var/spool/postoffice \
