@@ -8,11 +8,11 @@ Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
 Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
-Source1:	zmailer-pl.txt
+Source1:	%{name}-pl.txt
 Source2:	forms-pl-0.4.tar.gz
-Source3:	zmailer.logrotate
-Patch0:		zmailer-config.diff
-Patch1:		zmailer-libwrap.patch
+Source3:	%{name}.logrotate
+Patch0:		%{name}-config.diff
+Patch1:		%{name}-libwrap.patch
 Prereq:		/sbin/chkconfig
 Prereq:		%{_sbindir}/groupadd
 Prereq:		%{_sbindir}/groupdel
