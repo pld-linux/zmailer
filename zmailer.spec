@@ -22,6 +22,9 @@ Patch1:		%{name}-acfix.patch
 Patch2:		%{name}-glibc.patch
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel
+BuildRequires:	pam-devel
+BuildRequires:	db3-devel
+BuildRequires:	gdbm-devel
 %{!?_without_whoson:BuildRequires:	whoson-devel}
 %{!?_without_ldap:BuildRequires:	openldap-devel}
 URL:		http://www.zmailer.org/
