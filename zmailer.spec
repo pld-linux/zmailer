@@ -1,4 +1,6 @@
 #
+# TODO: fix group creation
+#
 # Conditional build:
 %bcond_without	whoson	# build without WHOSON support
 %bcond_without	ldap	# build without LDAP support
@@ -8,7 +10,7 @@ Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
 Version:	2.99.56
-Release:	4
+Release:	4.1
 License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
