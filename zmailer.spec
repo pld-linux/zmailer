@@ -7,7 +7,7 @@ Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
 Version:	2.99.55
-Release:	1
+Release:	2
 License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
@@ -21,6 +21,7 @@ Patch0:		%{name}-config.diff
 Patch1:		%{name}-acfix.patch
 Patch2:		%{name}-glibc.patch
 BuildRequires:	autoconf
+BuildRequires:	ed
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pam-devel
