@@ -285,7 +285,7 @@ if [ "$1" = "0" ]; then
 fi
 
 %pre
-#%%{_sbindir}/groupadd -f -g 47 zmailer
+#/usr/sbin/groupadd -f -g 47 zmailer
 
 if ! grep -q "^zmailer:" /etc/group; then
 	echo "zmailer::47:root,petidomo,uucp,daemon,news" >>/etc/group
@@ -293,7 +293,7 @@ fi
 
 %postun
 if [ "$1" = "0" ]; then
-	%{_sbindir}/groupdel zmailer 2> /dev/null
+	/usr/sbin/groupdel zmailer 2> /dev/null
 fi
 
 %files
