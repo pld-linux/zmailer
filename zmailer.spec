@@ -90,7 +90,7 @@ To jest pakiet dla developerów. Zawiera plik nag³ówkowy i bibliotekê
 statyczn± ZMailera.
 
 %prep
-%setup -q -n %{name}-%{version} -a2
+%setup -q -a2
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -225,7 +225,7 @@ fi
 if [ ! -L /etc/mail/db/aliases ]; then
 	if [ -f /etc/mail/aliases ]; then
 		echo "Generating Symlink to use /etc/mail/aliases for aliasing"
-		rm -f /etc/mail/db/aliases || echo "Dziwnie pusto w (Strange nothing at) /etc/mail/db/aliases. Ale nie martw siê ... (But don't worry..)"
+		rm -f /etc/mail/db/aliases || echo "Strange nothing at (Dziwnie puste) /etc/mail/db/aliases. Don't worry (Nie martw siê)."
 	else
 		echo "Installing new /etc/mail/aliases from zmailer sample"
 		mv -f /etc/mail/db/aliases /etc/aliases
