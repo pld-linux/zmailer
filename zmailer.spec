@@ -23,6 +23,7 @@ Patch1:		%{name}-ldap-lmap.patch
 Patch2:		%{name}-glibc.patch
 Patch3:		%{name}-sleepycatdb.patch
 BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	ed
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
@@ -103,6 +104,7 @@ statyczn± ZMailera.
 %patch3 -p1
 
 %build
+cp -f /usr/share/automake/config.* .
 %{__autoconf}
 %configure \
 	--with-zconfig=%{_sysconfdir}/mail/zmailer.conf \
