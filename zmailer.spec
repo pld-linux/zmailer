@@ -8,7 +8,7 @@ Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
 Version:	2.99.55
-Release:	2
+Release:	3
 License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
@@ -22,31 +22,37 @@ Patch0:		%{name}-config.diff
 Patch1:		%{name}-acfix.patch
 Patch2:		%{name}-glibc.patch
 BuildRequires:	autoconf
+BuildRequires:	db3-devel
 BuildRequires:	ed
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pam-devel
-BuildRequires:	db3-devel
 %{!?_without_gdbm:BuildRequires:	gdbm-devel}
 %{!?_without_whoson:BuildRequires:	whoson-devel}
 %{!?_without_ldap:BuildRequires:	openldap-devel}
 URL:		http://www.zmailer.org/
-Requires:	logrotate >= 2.4
-Requires:	/etc/cron.d
+PreReq:		/sbin/chkconfig
 %{!?_without_whoson:Requires:	whoson >= 1.08}
-Prereq:		/sbin/chkconfig
-Prereq:		%{_sbindir}/groupadd
-Prereq:		%{_sbindir}/groupdel
+Requires(pre):	grep
+Requires(post):	grep
+Requires(post):	fileutils
+Requires(post):	net-tools
+Requires(post):	textutils
+Requires:	/etc/cron.d
+Requires:	/usr/sbin/groupdel
+Requires:	logrotate >= 2.4
 Provides:	smtpdaemon
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+Obsoletes:	smtpdaemon
 Obsoletes:	exim
+Obsoletes:	masqmail
+Obsoletes:	omta
 Obsoletes:	postfix
+Obsoletes:	qmail
 Obsoletes:	sendmail
 Obsoletes:	sendmail-cf
 Obsoletes:	sendmail-doc
 Obsoletes:	smail
-Obsoletes:	smtpdaemon
-Obsoletes:	qmail
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 This is a package that implements an internet message transfer agent
@@ -85,7 +91,7 @@ Requires:	%{name} = %{version}
 This is ZMailer's development package. It includes static library and
 header file.
 
-%description -l pl devel
+%description devel -l pl
 To jest pakiet dla developerów. Zawiera plik nag³ówkowy i bibliotekê
 statyczn± ZMailera.
 
@@ -117,7 +123,7 @@ autoconf
 #	--with-yp \
 #	--with-yp-lib='-lyp'
 #	--prefix=%{_libdir}/zmailer \
-#	--with-zconfig=no 
+#	--with-zconfig=no
 
 %{__make} COPTS="%{rpmcflags} -w" all
 
@@ -140,13 +146,13 @@ install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
 install	contrib/zmailcheck	$RPM_BUILD_ROOT%{_libdir}/zmailer/zmailcheck
 install	utils/zmailer.init.sh	$RPM_BUILD_ROOT/etc/rc.d/init.d/zmailer
 
-touch $RPM_BUILD_ROOT%{_sysconfdir}/mail/mailname
+> $RPM_BUILD_ROOT%{_sysconfdir}/mail/mailname
 
 # Few symlinks
 ln -fs zmailer/sendmail			$RPM_BUILD_ROOT%{_libdir}/sendmail
 ln -fs ../lib/zmailer/vacation.sh	$RPM_BUILD_ROOT%{_bindir}/vacation
 ln -fs ../lib/zmailer/mailq		$RPM_BUILD_ROOT%{_bindir}/mailq
-ln -fs ../lib/zmailer/rmail             $RPM_BUILD_ROOT%{_bindir}/rmail
+ln -fs ../lib/zmailer/rmail		$RPM_BUILD_ROOT%{_bindir}/rmail
 ln -fs ../lib/zmailer/newaliases	$RPM_BUILD_ROOT%{_bindir}/newaliases
 ln -fs ../lib/zmailer/zmailer		$RPM_BUILD_ROOT%{_sbindir}/zmailer
 ln -fs ../lib/zmailer/sendmail		$RPM_BUILD_ROOT%{_sbindir}/sendmail
@@ -177,14 +183,14 @@ cp -f ./cf/SMTP+UUCP.cf router.cf
 )
 
 # Aliases
-touch $RPM_BUILD_ROOT%{_sysconfdir}/mail/aliases
+> $RPM_BUILD_ROOT%{_sysconfdir}/mail/aliases
 
 # Remove unnecesary proto and bak files
 rm -rf `find $RPM_BUILD_ROOT -name proto`
 rm -rf `find $RPM_BUILD_ROOT -name bak`
 
 # Install another files
-cat  << EOF > $RPM_BUILD_ROOT/etc/cron.d/zmailer
+cat << EOF > $RPM_BUILD_ROOT/etc/cron.d/zmailer
 # Resubmit deferred messages
 28 */1 * * *		root	!%{_libdir}/zmailer/zmailer resubmit >/dev/null
 # Cleanout public and postman directories
@@ -217,12 +223,12 @@ umask 022
 /sbin/chkconfig --add zmailer
 
 if [ -x /bin/hostname ]; then
-hostname --fqdn >/etc/mail/mailname
+	hostname --fqdn >/etc/mail/mailname
 fi
 
 if [ -f /etc/mail/router.fc ]; then
-rm -f /etc/mail/router.fc
-fi 
+	rm -f /etc/mail/router.fc
+fi
 
 # Gymnastics to convice zmailer to use /etc/mail/aliases
 # or provide /etc/mail/aliases it if not found.
@@ -245,7 +251,7 @@ if ! grep -q "^hostmaster:" /etc/mail/aliases; then
 	echo "Adding Entry for hostmaster in /etc/mail/aliases"
 	echo "hostmaster:	root" >>/etc/mail/aliases
 fi
-					
+
 for i in postmaster postoffice MAILER-DAEMON postmast nobody webmaster administrator \
 ftpmaster newsmaster w3cache squid news proxy abuse ircd; do
 	if ! grep -q "^$i:" /etc/mail/aliases; then
@@ -271,7 +277,7 @@ if [ -e /var/lock/subsys/zmailer ]; then
 fi
 
 rm -f /var/spool/postoffice/.pid.*
-    
+
 if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del zmailer
 	rm -f /var/log/mail/*
@@ -281,7 +287,7 @@ fi
 #%{_sbindir}/groupadd -f -g 47 zmailer
 
 if ! grep -q "^zmailer:" /etc/group; then
-        echo "zmailer::47:root,petidomo,uucp,daemon,news" >>/etc/group
+	echo "zmailer::47:root,petidomo,uucp,daemon,news" >>/etc/group
 fi
 
 %postun
