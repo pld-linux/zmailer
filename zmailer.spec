@@ -340,7 +340,7 @@ fi
 %attr(644,root,root) %{_sysconfdir}/mail/mailname
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/mail/aliases
 
-%attr(640,root,root) /etc/logrotate.d/zmailer
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/zmailer
 %attr(640,root,root) /etc/cron.d/zmailer
 
 %attr(754,root,root) /etc/rc.d/init.d/zmailer
