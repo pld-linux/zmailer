@@ -148,8 +148,8 @@ diff -urN zmailer-2.99.50s18.orig/proto/smtpserver.conf.in zmailer-2.99.50s18/pr
  # where the brackets are special characters.
 diff -urN zmailer-2.99.50s18.orig/utils/zmailer.init.sh.in zmailer-2.99.50s18/utils/zmailer.init.sh.in
 --- zmailer-2.99.50s18.orig/utils/zmailer.init.sh.in	Fri May 21 10:44:41 1999
-+++ zmailer-2.99.50s18/utils/zmailer.init.sh.in	Fri May 21 11:34:34 1999
-@@ -1,7 +1,25 @@
++++ zmailer-2.99.50s18/utils/zmailer.init.sh.in	Fri May 21 11:42:26 1999
+@@ -1,7 +1,27 @@
 -#! /bin/sh
 +#!/bin/sh
 +#
@@ -159,6 +159,8 @@ diff -urN zmailer-2.99.50s18.orig/utils/zmailer.init.sh.in zmailer-2.99.50s18/ut
 +# chkconfig: 2345 80 30
 +# description: zmailer is a Mail Transport Agent, which is the program \
 +# that moves mail from one machine to another.
++
++export PATH=/bin:/sbin:/usr/bin:/usr/sbin
 +
 +# Source function library.
 +. /etc/rc.d/init.d/functions
@@ -176,7 +178,7 @@ diff -urN zmailer-2.99.50s18.orig/utils/zmailer.init.sh.in zmailer-2.99.50s18/ut
  if [ -r $ZCONFIG ]; then
  	. $ZCONFIG
  else
-@@ -11,23 +29,28 @@
+@@ -11,23 +31,28 @@
  case "$1" in
  start)
  	if [ "${SMTPSERVER}" ]; then
