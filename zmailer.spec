@@ -24,15 +24,16 @@ Patch2:		%{name}-glibc.patch
 Patch3:		%{name}-sleepycatdb.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	db-devel
 BuildRequires:	ed
+%{?with_gdbm:BuildRequires:	gdbm-devel}
 BuildRequires:	libwrap-devel
+%{?with_ldap:BuildRequires:	openldap-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pam-devel
-BuildRequires:	db-devel
 BuildRequires:	perl-devel
-%{?with_gdbm:BuildRequires:	gdbm-devel}
+BuildRequires:	rpmbuild(macros) >= 1.159
 %{?with_whoson:BuildRequires:	whoson-devel}
-%{?with_ldap:BuildRequires:	openldap-devel}
 URL:		http://www.zmailer.org/
 PreReq:		rc-scripts
 Requires(pre):	grep
@@ -45,6 +46,7 @@ Requires(postun):	/usr/sbin/groupdel
 Requires:	/etc/cron.d
 Requires:	logrotate >= 2.4
 %{?with_whoson:Requires:	whoson >= 1.08}
+Provides:	group(zmailer)
 Provides:	smtpdaemon
 Obsoletes:	courier
 Obsoletes:	exim
@@ -285,15 +287,34 @@ if [ "$1" = "0" ]; then
 fi
 
 %pre
-#/usr/sbin/groupadd -f -g 47 zmailer
-
 if ! grep -q "^zmailer:" /etc/group; then
 	echo "zmailer::47:root,petidomo,uucp,daemon,news" >>/etc/group
 fi
+#if [ -n "`/usr/bin/getgid zmailer`" ]; then
+#	if [ "`/usr/bin/getgid zmailer`" != "47" ]; then
+#		echo "Error: group zmailer doesn't have gid=47. Correct this before installing zmailer." 1>&2
+#		exit 1
+#	else
+#		for u in root petidomo uucp daemon news; do
+#			GROUPS=/bin/id -n -G $u | sed 's/ /,/g'
+#			if [ -z `echo $GROUPS | grep '\(^\|,\)zmailer\($\|,\)'; then
+#				usermod -G "${GROUPS},zmailer" $u 1>&2 ||:
+#			fi
+#		done
+#	fi
+#else
+#	echo "Adding group zmailer GID=47."
+#	if /usr/sbin/groupadd -g 47 zmailer 1>&2; then
+#		for u in root petidomo uucp daemon news; do
+#			GROUPS=`/bin/id -n -G $u | sed 's/ /,/g'`
+#			usermod -G "${GROUPS},zmailer" $u 1>&2 ||:
+#		done
+#	fi
+#fi
 
 %postun
 if [ "$1" = "0" ]; then
-	/usr/sbin/groupdel zmailer 2> /dev/null
+	%groupremove zmailer
 fi
 
 %files
