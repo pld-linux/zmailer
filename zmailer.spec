@@ -305,7 +305,11 @@ rm -rf $RPM_BUILD_ROOT
 - new logging style
 
 $Log: zmailer.spec,v $
-Revision 1.6  1999-07-08 21:32:14  misiek
+Revision 1.7  1999-07-09 16:22:28  kloczek
+
+- added line on top spec file with cvs tags ($Revision:$ and $Date:$).
+
+Revision 1.6  1999/07/08 21:32:14  misiek
 auto zmailer.spec actualization
 
 Revision 1.12  1999/07/05 12:20:11  misiek
