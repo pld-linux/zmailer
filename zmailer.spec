@@ -24,14 +24,13 @@ License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
 Source0:	zmailer-%{_snap}.tar.bz2
-#Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
+# Source0-md5:	368c147db86d534b6fdfcae21138ddc4
 Source1:	%{name}-pl.txt
 Source2:	forms-pl-0.4.tar.gz
 # Source2-md5:	c4ca963cd941e3ac533860d7d3d9f4b1
 Source3:	%{name}.logrotate
 Patch0:		%{name}-config.diff
 Patch2:		%{name}-glibc.patch
-Patch3:		%{name}-sleepycatdb.patch
 Patch4:		%{name}-spf.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
