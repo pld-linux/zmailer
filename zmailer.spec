@@ -2,7 +2,7 @@
 Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
-Version:	2.99.51_pre1
+Version:	2.99.51_pre3
 Release:	1
 Copyright:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
