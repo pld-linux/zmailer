@@ -20,6 +20,7 @@ Source3:	%{name}.logrotate
 Patch0:		%{name}-config.diff
 Patch1:		%{name}-acfix.patch
 Patch2:		%{name}-glibc.patch
+BuildRequires:	autoconf
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pam-devel
