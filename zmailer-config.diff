@@ -128,11 +128,11 @@ diff -urN zmailer-2-cvs.orig/proto/smtpserver.conf.in zmailer-2-cvs/proto/smtpse
 -PARAM help  Our telephone number is: +1-234-567-8900, and
 -PARAM help  telefax number is: +1-234-567-8999
 -PARAM help  Our business-hours are Mon-Fri: 0800-1700 (Timezone: -0700)
-+PARAM help  Polish Linux Distribution for Developers
++PARAM help  Polish Linux Distribution
 +PARAM help  
-+PARAM help  http://www.shadow.eu.org/PLD/
-+PARAM help  ftp://ftp.ps.pl/pub/Linux/PLD/
-+PARAM help  pld-list@mailbox.tuniv.szczecin.pl (managed by majordomo)
++PARAM help  http://www.pld.org.pl/
++PARAM help  ftp://ftp.pld.org.pl/
++PARAM help  pld-list@pld.org.pl (managed by qmail)
 +PARAM help
  PARAM help
  PARAM help  Questions regarding our email service should be sent via
