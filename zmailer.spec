@@ -27,7 +27,7 @@ BuildRequires:	openldap-devel
 BuildRequires:	glibc-devel >= 2.1
 BuildRoot:	/tmp/%{name}-%{version}-root
 Provides:	smtpdaemon
-Conflicts:	smtpdaemon
+Obsoletes:	smtpdaemon
 
 %description
 This is a package that implements an internet message transfer agent called
@@ -243,28 +243,28 @@ fi
 #%{_sbindir}/groupadd -f -g 47 zmailer
 
 if ! grep -q "^zmailer:" /etc/group; then
-	echo "zmailer:x:47:root,petidomo,uucp,daemon,news" >> /etc/group
-	grpconv
+        echo "zmailer::47:root,petidomo,uucp,daemon,news" >>/etc/group
 fi
 
-#%postun
-#if [ $1 = 0 ]; then
-#	%{_sbindir}/groupdel zmailer 2> /dev/null
-#fi
+%postun
+if [ $1 = 0 ]; then
+	%{_sbindir}/groupdel zmailer 2> /dev/null
+fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(644,root,root) %config /etc/mail/cf
+%config /etc/mail/cf
+%config /etc/mail/forms
+%config /etc/mail/fqlists
+
 %defattr(644,root,root,3755)
-%attr(644,root,root) %config /etc/mail/db
-%defattr(644,root,root,755)
-%attr(644,root,root) %config /etc/mail/forms
-%attr(644,root,root) %config /etc/mail/fqlists
+%config /etc/mail/db
+
 %defattr(644,root,root,2755)
-%attr(644,root,root) %config /etc/mail/lists
+%config /etc/mail/lists
 
 %defattr(644,root,root,755)
 %attr(644,root,root) %config /etc/mail/*.*
@@ -274,12 +274,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(640,root,root) /etc/logrotate.d/zmailer
 %attr(640,root,root) /etc/crontab.d/zmailer
 
-%attr(700,root,root) /etc/rc.d/init.d/zmailer
+%attr(754,root,root) /etc/rc.d/init.d/zmailer
 
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,root,root) %{_libdir}/sendmail
-
 %attr(755,root,root) %{_libdir}/zmailer
 
 %{_mandir}/man[158]/*
@@ -297,10 +296,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %attr(750,root,root) %dir /var/log/mail
 
-%doc ChangeLog Overview README README.PERFORMANCE README.SPAM
-%doc doc/guides doc/toplevel-domains doc/manual/FAQ utils/usenet/usenet.sh
-%doc utils/mail2news utils/mailgateway $RPM_SOURCE_DIR/zmailer-pl.txt
-%doc doc/manual/zmanual.ps
+%doc ChangeLog,Overview,README,README.PERFORMANCE,README.SPAM
+%doc doc/guides,doc/toplevel-domains,doc/manual/FAQ,utils/usenet/usenet.sh
+%doc utils/mail2news,utils/mailgateway,doc/manual/zmanual.ps
+%doc $RPM_SOURCE_DIR/doc/zmailer-pl.txt
 
 %files devel
 %defattr(644,root,root,755)
