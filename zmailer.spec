@@ -48,6 +48,7 @@ Provides:	smtpdaemon
 Obsoletes:	courier
 Obsoletes:	exim
 Obsoletes:	masqmail
+Obsoletes:	nullmailer
 Obsoletes:	omta
 Obsoletes:	postfix
 Obsoletes:	qmail
@@ -56,6 +57,7 @@ Obsoletes:	sendmail-cf
 Obsoletes:	sendmail-doc
 Obsoletes:	smail
 Obsoletes:	smtpdaemon
+Obsoletes:	ssmtp
 Conflicts:	vacation
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
