@@ -19,14 +19,15 @@ Source2:	forms-pl-0.4.tar.gz
 # Source2-md5:	c4ca963cd941e3ac533860d7d3d9f4b1
 Source3:	%{name}.logrotate
 Patch0:		%{name}-config.diff
-Patch1:		%{name}-acfix.patch
+Patch1:		%{name}-ldap-lmap.patch
 Patch2:		%{name}-glibc.patch
+Patch3:		%{name}-sleepycatdb.patch
 BuildRequires:	autoconf
-BuildRequires:	db3-devel
 BuildRequires:	ed
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.7c
 BuildRequires:	pam-devel
+BuildRequires: 	db-devel
 %{?with_gdbm:BuildRequires:	gdbm-devel}
 %{?with_whoson:BuildRequires:	whoson-devel}
 %{?with_ldap:BuildRequires:	openldap-devel}
@@ -93,8 +94,9 @@ statyczn± ZMailera.
 %prep
 %setup -q -a2
 %patch0 -p1
-%patch1 -p1
+%patch1 -p0
 %patch2 -p1
+%patch3 -p1
 
 %build
 %{__autoconf}
@@ -131,7 +133,7 @@ install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
 
 # Install main files
 %{__make} install \
-	prefix=$RPM_BUILD_ROOT \
+	DESTDIR=$RPM_BUILD_ROOT \
 	MAILVAR=$RPM_BUILD_ROOT%{_sysconfdir}/mail \
 	MAILSHARE=$RPM_BUILD_ROOT%{_sysconfdir}/mail \
 	libdir=$RPM_BUILD_ROOT%{_libdir} \
@@ -157,7 +159,7 @@ ln -fs ../lib/zmailer/sendmail		$RPM_BUILD_ROOT%{_sbindir}/sendmail
 	MANDIR=$RPM_BUILD_ROOT%{_mandir}
 
 # To avoid conflict with INN
-mv -f $RPM_BUILD_ROOT%{_mandir}/man8/sm.8 $RPM_BUILD_ROOT%{_mandir}/man8/sm-zmailer.8
+mv -f $RPM_BUILD_ROOT%{_mandir}/man8/sm.8zm $RPM_BUILD_ROOT%{_mandir}/man8/sm-zmailer.8zm
 
 (
 # Install Polish/English forms
