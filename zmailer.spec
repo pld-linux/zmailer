@@ -38,8 +38,8 @@ Requires(post):	grep
 Requires(post):	fileutils
 Requires(post):	net-tools
 Requires(post):	textutils
+Requires(postun):	/usr/sbin/groupdel
 Requires:	/etc/cron.d
-Requires:	/usr/sbin/groupdel
 Requires:	logrotate >= 2.4
 Provides:	smtpdaemon
 Obsoletes:	smtpdaemon
