@@ -305,7 +305,7 @@ rm -rf $RPM_BUILD_ROOT
 - new logging style
 
 $Log: zmailer.spec,v $
-Revision 1.5  1999-07-07 21:30:09  misiek
+Revision 1.6  1999-07-08 21:32:14  misiek
 auto zmailer.spec actualization
 
 Revision 1.12  1999/07/05 12:20:11  misiek
