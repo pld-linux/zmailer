@@ -1,4 +1,5 @@
 /var/log/mail/* {
+	olddir /var/log/archiv/mail
         postrotate
 	        /usr/lib/zmailer/zmailer synclog
         endscript
