@@ -122,7 +122,6 @@ cp -f /usr/share/automake/config.* .
 	--with-zconfig=%{_sysconfdir}/mail/zmailer.conf \
 	--with-postoffice=/var/spool/postoffice \
 	--with-rmailpath=%{_bindir}/rmail \
-	--with-zconfig-noload \
 	--with-nntpserver=news \
 	--with-system-malloc \
 	--with-mailshare=%{_sysconfdir}/mail \
