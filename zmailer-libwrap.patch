@@ -1,0 +1,12 @@
+diff -urN zmailer-2.99.51.orig/configure.in zmailer-2.99.51/configure.in
+--- zmailer-2.99.51.orig/configure.in	Mon Jul 19 14:12:05 1999
++++ zmailer-2.99.51/configure.in	Mon Jul 19 15:35:26 1999
+@@ -1248,7 +1248,7 @@
+ #	fi
+ #	: # "nop"	
+ #-------------
+-	AC_CHECK_HEADER(tcpd.h)
++	AC_CHECK_HEADERS(tcpd.h)
+ 	if test "$ac_cv_header_tcpd_h" = yes; then
+ 	    LIBWRAP="-lwrap"
+ 	    INCLWRAP=""
