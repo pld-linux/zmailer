@@ -18,11 +18,11 @@ URL:		http://www.zmailer.org
 Requires:	logrotate >= 2.4
 Requires:	/etc/crontab.d
 Requires:	whoson >= 1.08
-BuildPrereq:	libwrap-devel
-BuildPrereq:	openssl-devel
-BuildPrereq:	whoson-devel
-BuildPrereq:	openldap-devel
-BuildPrereq:	glibc-devel >= 2.1
+BuildRequires:	libwrap-devel
+BuildRequires:	openssl-devel
+BuildRequires:	whoson-devel
+BuildRequires:	openldap-devel
+BuildRequires:	glibc-devel >= 2.1
 BuildRoot:	/tmp/%{name}-%{version}-root
 Provides:	smtpdaemon
 Conflicts:	smtpdaemon
