@@ -10,6 +10,7 @@ Group(pl):	Sieciowe/Serwery
 Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
 Source1:	zmailer-pl.txt
 Source2:	forms-pl-0.4.tar.gz
+Source3:	zmailer.logrotate
 Patch0:		zmailer-config.diff
 Patch1:		zmailer-openssl.patch
 Patch2:		zmailer-libwrap.patch
@@ -158,18 +159,7 @@ cat  << EOF > $RPM_BUILD_ROOT/etc/cron.d/zmailer
 11 6,12,18,0 * * *	root	!%{_libdir}/zmailer/zmailcheck
 EOF
 
-cat  << EOF > $RPM_BUILD_ROOT/etc/logrotate.d/zmailer
-errors root
-compress
-monthly
-
-/var/log/mail/* {
-	create 640 root root
-        postrotate
-        %{_libdir}/zmailer/zmailer synclog
-        endscript
-}
-EOF
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/logrotate.d/zmailer
 
 # Router configuration
 cp -f $RPM_BUILD_ROOT/etc/mail/cf/SMTP+UUCP.cf \
