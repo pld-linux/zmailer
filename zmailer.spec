@@ -8,7 +8,7 @@ Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
 Version:	2.99.56
-Release:	1.1
+Release:	1.2
 License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
@@ -45,7 +45,7 @@ Requires:	/etc/cron.d
 Requires:	logrotate >= 2.4
 %{?with_whoson:Requires:	whoson >= 1.08}
 Provides:	smtpdaemon
-Obsoletes:	smtpdaemon
+Obsoletes:	courier
 Obsoletes:	exim
 Obsoletes:	masqmail
 Obsoletes:	omta
@@ -55,6 +55,7 @@ Obsoletes:	sendmail
 Obsoletes:	sendmail-cf
 Obsoletes:	sendmail-doc
 Obsoletes:	smail
+Obsoletes:	smtpdaemon
 Conflicts:	vacation
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
