@@ -25,7 +25,7 @@ Patch3:		%{name}-sleepycatdb.patch
 BuildRequires:	autoconf
 BuildRequires:	ed
 BuildRequires:	libwrap-devel
-BuildRequires:	openssl-devel >= 0.9.7c
+BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pam-devel
 BuildRequires:	db-devel
 BuildRequires:	perl-devel
