@@ -3,7 +3,7 @@
 %bcond_without	whoson	# build without WHOSON support
 %bcond_without	ldap	# build without LDAP support
 %bcond_without	gdbm	# build without GDBM support
-%bcond_without  spf	# build without SPF support
+%bcond_without	spf	# build without SPF support
 #
 
 %define _snap 20040426
