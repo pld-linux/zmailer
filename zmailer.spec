@@ -25,7 +25,7 @@ License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
 Source0:	zmailer-%{_snap}.tar.bz2
-# Source0-md5:	abe568c51d5b3daa53880391ec350d0d
+# Source0-md5:	0d2d2b9f5fcf9057b1d710283c1e9a10
 Source1:	%{name}-pl.txt
 Source2:	forms-pl-0.4.tar.gz
 # Source2-md5:	c4ca963cd941e3ac533860d7d3d9f4b1
