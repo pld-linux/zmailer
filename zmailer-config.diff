@@ -1,6 +1,6 @@
-diff -u -r zmailer-2.99.56.orig/contrib/zmailcheck zmailer-2.99.56/contrib/zmailcheck
---- zmailer-2.99.56.orig/contrib/zmailcheck	1998-02-10 22:01:44.000000000 +0100
-+++ zmailer-2.99.56/contrib/zmailcheck	2004-01-31 23:51:49.000000000 +0100
+diff -u -r zmailer.orig/contrib/zmailcheck zmailer/contrib/zmailcheck
+--- zmailer.orig/contrib/zmailcheck	1998-02-10 22:01:44.000000000 +0100
++++ zmailer/contrib/zmailcheck	2004-04-26 19:15:44.000000000 +0200
 @@ -4,7 +4,7 @@
  
  set -e
@@ -10,9 +10,9 @@ diff -u -r zmailer-2.99.56.orig/contrib/zmailcheck zmailer-2.99.56/contrib/zmail
  
  status()
  {
-diff -u -r zmailer-2.99.56.orig/proto/cf/SMTP+UUCP.cf.in zmailer-2.99.56/proto/cf/SMTP+UUCP.cf.in
---- zmailer-2.99.56.orig/proto/cf/SMTP+UUCP.cf.in	2001-05-30 10:20:17.000000000 +0200
-+++ zmailer-2.99.56/proto/cf/SMTP+UUCP.cf.in	2004-01-31 23:51:49.000000000 +0100
+diff -u -r zmailer.orig/proto/cf/SMTP+UUCP.cf.in zmailer/proto/cf/SMTP+UUCP.cf.in
+--- zmailer.orig/proto/cf/SMTP+UUCP.cf.in	2001-05-30 10:22:36.000000000 +0200
++++ zmailer/proto/cf/SMTP+UUCP.cf.in	2004-04-26 19:17:01.000000000 +0200
 @@ -7,7 +7,7 @@
  
  . $ZCONFIG
@@ -74,9 +74,9 @@ diff -u -r zmailer-2.99.56.orig/proto/cf/SMTP+UUCP.cf.in zmailer-2.99.56/proto/c
  [ "$orgdomains" = x ] && orgdomains=$orgdomain
  
  # set hostname to enable message-id generation and checking
-diff -u -r zmailer-2.99.56.orig/proto/sm.conf.in zmailer-2.99.56/proto/sm.conf.in
---- zmailer-2.99.56.orig/proto/sm.conf.in	1998-07-28 18:00:18.000000000 +0200
-+++ zmailer-2.99.56/proto/sm.conf.in	2004-01-31 23:51:49.000000000 +0100
+diff -u -r zmailer.orig/proto/sm.conf.in zmailer/proto/sm.conf.in
+--- zmailer.orig/proto/sm.conf.in	1998-07-28 18:02:26.000000000 +0200
++++ zmailer/proto/sm.conf.in	2004-04-26 19:17:01.000000000 +0200
 @@ -9,17 +9,17 @@
  #
  # bitnet stuff F=hu not set?
@@ -102,10 +102,10 @@ diff -u -r zmailer-2.99.56.orig/proto/sm.conf.in zmailer-2.99.56/proto/sm.conf.i
  #		# CYRUS example from: Tom Samplonius <tom@sdf.com>
  procm	sSPfn	@PROCMAIL@	procmail -a $h -d $u
  #		# Procmail example from: Ken Pizzini <ken@spry.com>
-diff -u -r zmailer-2.99.56.orig/proto/smtpserver.conf.in zmailer-2.99.56/proto/smtpserver.conf.in
---- zmailer-2.99.56.orig/proto/smtpserver.conf.in	2003-08-29 11:55:06.000000000 +0200
-+++ zmailer-2.99.56/proto/smtpserver.conf.in	2004-01-31 23:51:49.000000000 +0100
-@@ -93,7 +93,7 @@
+diff -u -r zmailer.orig/proto/smtpserver.conf.in zmailer/proto/smtpserver.conf.in
+--- zmailer.orig/proto/smtpserver.conf.in	2004-04-20 13:50:06.000000000 +0200
++++ zmailer/proto/smtpserver.conf.in	2004-04-26 19:17:01.000000000 +0200
+@@ -114,7 +114,7 @@
  #  %T  =  curtime string
  #  %X  =  xlatelang parameter
  #
@@ -114,9 +114,9 @@ diff -u -r zmailer-2.99.56.orig/proto/smtpserver.conf.in zmailer-2.99.56/proto/s
  #PARAM hdr220 %H ESMTP (NO UCE)(NO UBE) our local time is now %T
  #
  # Note above the "ESMTP" words are present because *some* MTA systems won't
-@@ -101,16 +101,16 @@
- # "EHLO is to be done blindly, server responses are not to be studied for
- #  any possible 'ESMTP' keyword!"
+@@ -126,16 +126,16 @@
+ # web page or such things.
+ #PARAM contact-pointer-message Ask HELP for our contact information.
  #
 -#PARAM help =============================================================
 -#PARAM help  This mail-server is at Yoyodyne Propulsion Inc.
@@ -141,19 +141,9 @@ diff -u -r zmailer-2.99.56.orig/proto/smtpserver.conf.in zmailer-2.99.56/proto/s
  #
  # Uncomment following for not to strip incoming addresses of format:
  # <@aa,@bb:cc@dd> into non-source-routed base form: <cc@dd>
-@@ -182,7 +182,7 @@
- #    but without that enable, those four flags have no effect.
- #
- #localhost           999 ftveR
--#some.host.domain    999 !NO EMAIL ACCEPTED FROM YOUR MACHINE
-+#.spam.net    999 !NO EMAIL ACCEPTED FROM YOUR MACHINE
- # If the host presents itself as:  HELO [1.2.3.4], be lenient to it..
- # The syntax below is due to these patterns being SH-GLOB style patterns
- # where the brackets are special characters.
-Tylko w zmailer-2.99.56.orig/utils: zmailer.init.sh
-diff -u -r zmailer-2.99.56.orig/utils/zmailer.init.sh.in zmailer-2.99.56/utils/zmailer.init.sh.in
---- zmailer-2.99.56.orig/utils/zmailer.init.sh.in	2003-05-05 14:05:59.000000000 +0200
-+++ zmailer-2.99.56/utils/zmailer.init.sh.in	2004-01-31 23:51:49.000000000 +0100
+diff -u -r zmailer.orig/utils/zmailer.init.sh.in zmailer/utils/zmailer.init.sh.in
+--- zmailer.orig/utils/zmailer.init.sh.in	2003-05-05 14:30:11.000000000 +0200
++++ zmailer/utils/zmailer.init.sh.in	2004-04-26 19:17:01.000000000 +0200
 @@ -1,7 +1,23 @@
 -#! /bin/sh
 +#!/bin/sh
