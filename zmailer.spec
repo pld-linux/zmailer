@@ -1,8 +1,13 @@
+#
+# Conditional build:
+# _without_whoson	- without WHOSON support
+# _without_ldap		- without LDAP support
+#
 Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
-Version:	2.99.54
-Release:	2
+Version:	2.99.55
+Release:	1
 License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
@@ -13,16 +18,16 @@ Source1:	%{name}-pl.txt
 Source2:	forms-pl-0.4.tar.gz
 Source3:	%{name}.logrotate
 Patch0:		%{name}-config.diff
-Patch1:		%{name}-libwrap.patch
+Patch1:		%{name}-acfix.patch
+Patch2:		%{name}-glibc.patch
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel
-BuildRequires:	whoson-devel
-BuildRequires:	openldap-devel
-BuildRequires:	glibc-devel >= 2.1
+%{!?_without_whoson:BuildRequires:	whoson-devel}
+%{!?_without_ldap:BuildRequires:	openldap-devel}
 URL:		http://www.zmailer.org/
 Requires:	logrotate >= 2.4
 Requires:	/etc/cron.d
-Requires:	whoson >= 1.08
+%{!?_without_whoson:Requires:	whoson >= 1.08}
 Prereq:		/sbin/chkconfig
 Prereq:		%{_sbindir}/groupadd
 Prereq:		%{_sbindir}/groupdel
@@ -62,8 +67,12 @@ Summary:	Static library and header file for zmailer
 Summary(pl):	Plik nag³ówkowy i biblioteka statyczna dla zmailera
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
+Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 Requires:	%{name} = %{version}
 
 %description devel
@@ -75,15 +84,16 @@ To jest pakiet dla developerów. Zawiera plik nag³ówkowy i bibliotekê
 statyczn± ZMailera.
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q -n %{name}-%{version} -a2
 %patch0 -p1
 %patch1 -p1
-%setup -q -a 2 -D -T -n %{name}-%{version}
+%patch2 -p1
+#%%#setup -q -a 2 -D -T -n %{name}-%{version}
 
 %build
 autoconf
-ZCONFIG=%{_sysconfdir}/mail/zmailer.conf \
-%configure
+%configure \
+	--with-zconfig=%{_sysconfdir}/mail/zmailer.conf \
 	--with-postoffice=/var/spool/postoffice \
 	--with-rmailpath=%{_bindir}/rmail \
 	--with-nntpserver=news \
@@ -93,8 +103,8 @@ ZCONFIG=%{_sysconfdir}/mail/zmailer.conf \
 	--with-mailbin=%{_libdir}/zmailer \
 	--with-mailvar=%{_sysconfdir}/mail \
 	--with-ta-mmap \
-	--with-whoson \
-	--with-ldap-prefix \
+	%{!?_without_whoson:--with-whoson} \
+	%{!?_without_ldap:--with-ldap-prefix} \
 	--with-openssl-prexix=%{_prefix} \
 	--with-tcp-wrappers \
 	--with-ipv6 \
@@ -140,18 +150,20 @@ ln -fs ../lib/zmailer/sendmail		$RPM_BUILD_ROOT%{_sbindir}/sendmail
 # To avoid conflict with INN
 mv -f $RPM_BUILD_ROOT%{_mandir}/man8/sm.8 $RPM_BUILD_ROOT%{_mandir}/man8/sm-zmailer.8
 
+(
 # Install Polish/English forms
 cd forms*
 cp -f forms/* $RPM_BUILD_ROOT%{_sysconfdir}/mail/forms/proto
-cp vacation.msg $RPM_BUILD_ROOT%{_sysconfdir}/mail
+install vacation.msg $RPM_BUILD_ROOT%{_sysconfdir}/mail
 
 # Install proto files
 cd $RPM_BUILD_ROOT%{_sysconfdir}/mail/proto
-for x in *; do cp $x ..; done
+for x in *; do cp -f $x ..; done
 cd $RPM_BUILD_ROOT%{_sysconfdir}/mail/forms/proto
-for x in *; do cp $x ..; done
+for x in *; do cp -f $x ..; done
 cd $RPM_BUILD_ROOT%{_sysconfdir}/mail/db/proto
-for x in *; do cp $x ..; done
+for x in *; do cp -f $x ..; done
+)
 
 # Aliases
 touch $RPM_BUILD_ROOT%{_sysconfdir}/mail/aliases
@@ -172,9 +184,22 @@ EOF
 
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/logrotate.d/zmailer
 
-# Router configuration
-cp -f $RPM_BUILD_ROOT%{_sysconfdir}/mail/cf/SMTP+UUCP.cf \
-	$RPM_BUILD_ROOT%{_sysconfdir}/mail/router.cf
+# postoffice tree (as created by proto/post-install.sh):
+install -d $RPM_BUILD_ROOT/var/spool/postoffice/{deferred,freezer,postman,public}
+for f1 in A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ; do
+    install -d $RPM_BUILD_ROOT/var/spool/postoffice/{TLSsrvrcache,TLSclntcache,router}/$f1
+    for f2 in A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ; do
+	install -d $RPM_BUILD_ROOT/var/spool/postoffice/{queue,transport}/$f1/$f2
+    done
+done
+
+cp -f %{SOURCE1} .
+
+gzip -9nf ChangeLog Overview README* TODO doc/guides/* doc/toplevel-domains \
+	doc/manual/FAQ doc/design/zmog.ps zmailer-pl.txt
+
+%clean
+rm -rf $RPM_BUILD_ROOT
 
 %post
 umask 022
@@ -189,12 +214,12 @@ fi
 if [ ! -L /etc/mail/db/aliases ]; then
 	if [ -f /etc/mail/aliases ]; then
 		echo "Generating Symlink to use /etc/mail/aliases for aliasing"
-		rm -f /etc/mail/db/aliases || echo "Dziwnie pusto w (Strange nothing at) /etc/mail/db/aliases. Ale nie martw siê ... (But dont worry..)"
+		rm -f /etc/mail/db/aliases || echo "Dziwnie pusto w (Strange nothing at) /etc/mail/db/aliases. Ale nie martw siê ... (But don't worry..)"
 	else
 		echo "Installing new /etc/mail/aliases from zmailer sample"
 		mv -f /etc/mail/db/aliases /etc/aliases
 	fi
-	ln -s ../aliases /etc/mail/db/aliases
+	ln -sf ../aliases /etc/mail/db/aliases
 fi
 
 # Scan for Mandatory entries in /etc/aliases
@@ -249,9 +274,6 @@ if [ "$1" = "0" ]; then
 	%{_sbindir}/groupdel zmailer 2> /dev/null
 fi
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
 %defattr(644,root,root,755)
 %dir %{_sysconfdir}/mail
@@ -290,15 +312,20 @@ rm -rf $RPM_BUILD_ROOT
 %attr(1777,root,root) %dir /var/spool/postoffice/router
 %attr(0755,root,root) %dir /var/spool/postoffice/transport
 %attr(0755,root,root) %dir /var/spool/postoffice/transport/*
+%attr(0755,root,root) %dir /var/spool/postoffice/transport/*/*
 %attr(0755,root,root) %dir /var/spool/postoffice/queue/*
-
+%attr(0755,root,root) %dir /var/spool/postoffice/queue/*/*
+%attr(0700,root,root) %dir /var/spool/postoffice/TLSsrvrcache
+%attr(0700,root,root) %dir /var/spool/postoffice/TLSsrvrcache/*
+%attr(0700,root,root) %dir /var/spool/postoffice/TLSclntcache
+%attr(0700,root,root) %dir /var/spool/postoffice/TLSclntcache/*
 %attr(750,root,root) %dir /var/log/mail
 %attr(750,root,root) %dir /var/log/archiv/mail
 
-%doc ChangeLog Overview README README.PERFORMANCE README.SPAM
-%doc doc/guides doc/toplevel-domains doc/manual/FAQ utils/usenet/usenet.sh
-%doc utils/mail2news utils/mailgateway doc/manual/zmanual.ps
-%doc $RPM_SOURCE_DIR/zmailer-pl.txt
+%doc *.gz doc/*.gz doc/guides doc/manual/*.gz doc/design/*.gz
+%doc utils/usenet/usenet.sh utils/mail2news utils/mailgateway
+# doesn't build...
+#%doc doc/manual/zmanual.ps
 
 %files devel
 %defattr(644,root,root,755)

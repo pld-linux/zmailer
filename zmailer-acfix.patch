@@ -1,0 +1,57 @@
+--- zmailer-2.99.55/aclocal.m4.orig	Sun Jul 12 01:16:55 1998
++++ zmailer-2.99.55/aclocal.m4	Wed Sep 12 16:18:51 2001
+@@ -157,19 +157,6 @@
+   fi
+ fi])
+ 
+-AC_DEFUN(AC_STRUCT_ST_BLKSIZE,
+-[dnl
+-#
+-# Do we have "st_blksize" in the "struct stat" ?
+-# Defines  HAVE_ST_BLKSIZE  if we do
+-#
+-AC_CACHE_CHECK(for st_blksize in struct stat, ac_cv_struct_stat_st_blksize, [
+-AC_TRY_LINK([#include <sys/types.h>
+-#include <sys/stat.h>], [struct stat st; st.st_blksize; ],
+-		AC_DEFINE(HAVE_ST_BLKSIZE) ac_cv_struct_stat_st_blksize=yes)
+-])
+-])
+-
+ AC_DEFUN(AC_FUNC_GETMNTENT_MORE,
+ [dnl
+ #
+--- zmailer-2.99.55/configure.in.orig	Mon Sep 17 09:34:49 2001
++++ zmailer-2.99.55/configure.in	Mon Sep 17 09:32:05 2001
+@@ -38,6 +38,7 @@
+ AC_INIT(router/router.c)
+ AC_CONFIG_HEADER(config.h)
+ AC_LANG_C
++AC_PROG_CC
+ 
+ #----------------------------------------------------------------------------
+ #       Check if we should use gcc if available on this machine.
+@@ -752,12 +752,12 @@
+     if test "$ac_cv_lib_c_dbopen1" = no ; then
+       if test "x$ac_cv_lib_db1_dbopen1" = x ; then # not set
+         t_oldLibs="$LIBS"
+-        LIBS="$LIBS -ldb1"
+-        AC_TRY_LINK([], [dbopen();],  ac_cv_lib_db1_dbopen1=yes,
++        LIBS="$LIBS -ldb3"
++        AC_TRY_LINK([#include <db_185.h>], [dbopen(0,0,0,0,0);],  ac_cv_lib_db1_dbopen1=yes,
+                                       ac_cv_lib_db1_dbopen1=no)
+         LIBS="$t_oldLibs"
+         if test "$ac_cv_lib_db1_dbopen1" = yes ; then
+-          LIBDB="-ldb1"
++          LIBDB="-ldb3"
+           t_found_at="db1 library"
+           DBTYPE="btree"
+         else
+@@ -817,7 +817,7 @@
+     if test "$ac_cv_lib_c_dbopen" = no ; then
+       if test "x$ac_cv_lib_db1_dbopen" = x ; then # not set
+         t_oldLibs="$LIBS"
+-        LIBS="$LIBS -ldb1"
++        LIBS="$LIBS -ldb3"
+         AC_TRY_LINK([], [dbopen();],    ac_cv_lib_db1_dbopen=yes,
+                                         ac_cv_lib_db1_dbopen=no)
+         LIBS="$t_oldLibs"

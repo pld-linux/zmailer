@@ -1,0 +1,16 @@
+--- zmailer-2.99.55/sfio/src/lib/sfio/Stdio_b/sfstdio.c.orig	Mon Aug 23 13:41:49 1999
++++ zmailer-2.99.55/sfio/src/lib/sfio/Stdio_b/sfstdio.c	Wed Sep 12 16:28:41 2001
+@@ -5,13 +5,6 @@
+ */
+ #include	"sfstdhdr.h"
+ 
+-#if __STD_C
+-_BEGIN_EXTERNS_
+-extern int	printf(const char*,...);
+-extern int	strcmp(const char*,const char*);
+-_END_EXTERNS_
+-#endif
+-
+ /* standard names for fields of interest */
+ #if _FILE_cnt
+ #define	std_cnt		_cnt
