@@ -5,8 +5,8 @@ Version:	2.99.51
 Release:	1.0
 Copyright:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
-Group:		Daemons
-Group(pl):	Demony
+Group:		Networking/Daemons
+Group(pl):	Sieciowe/Serwery
 Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
 Source1:	zmailer-pl.txt
 Source2:	forms-pl-0.4.tar.gz
