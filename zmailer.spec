@@ -178,7 +178,8 @@ cp -f $RPM_BUILD_ROOT%{_sysconfdir}/mail/cf/SMTP+UUCP.cf \
 
 %post
 umask 022
-/sbin/chkconfig --add zmailer
+
+%chkconfig_add
 
 if [ -x /bin/hostname ]; then
 hostname --fqdn >/etc/mail/mailname
@@ -226,14 +227,9 @@ done | tr -d '\n' | tr -s '|' '\n' | sort >> /etc/mail/db/localnames
 %{_libdir}/zmailer/policy-builder.sh -n
 
 %preun
-if [ -e /var/lock/subsys/zmailer ]; then
-	/etc/rc.d/init.d/zmailer stop || :
-fi
-
+%chkconfig_del
 rm -f /var/spool/postoffice/.pid.*
-    
 if [ "$1" = "0" ]; then
-	/sbin/chkconfig --del zmailer
 	rm -f /var/log/mail/*
 fi
 
@@ -245,9 +241,7 @@ if ! grep -q "^zmailer:" /etc/group; then
 fi
 
 %postun
-if [ "$1" = "0" ]; then
-	%{_sbindir}/groupdel zmailer 2> /dev/null
-fi
+%groupdel
 
 %clean
 rm -rf $RPM_BUILD_ROOT
