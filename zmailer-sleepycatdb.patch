@@ -1,0 +1,75 @@
+diff -u -r zmailer-2.99.56.orig/lib/sleepycatdb.c zmailer-2.99.56/lib/sleepycatdb.c
+--- zmailer-2.99.56.orig/lib/sleepycatdb.c	2003-05-09 07:43:22.000000000 +0000
++++ zmailer-2.99.56/lib/sleepycatdb.c	2004-01-31 04:52:30.921720392 +0000
+@@ -295,7 +295,7 @@
+ 	err = db_create(&db, prv->ZSE ? prv->ZSE->env : NULL, 0);
+ 	if (err == 0 && db != NULL) {
+ 	    err = db->open( db,
+-#if (DB_VERSION_MAJOR == 4) && (DB_VERSION_MINOR == 1)
++#if (DB_VERSION_MAJOR == 4) && (DB_VERSION_MINOR >= 1)
+ 			    NULL, /* TXN id was added at SleepyDB 4.1 */
+ #endif
+ 			    prv->filename, NULL, prv->dbtype,
+diff -u -r zmailer-2.99.56.orig/smtpserver/policytest.c zmailer-2.99.56/smtpserver/policytest.c
+--- zmailer-2.99.56.orig/smtpserver/policytest.c	2003-11-11 12:54:03.000000000 +0000
++++ zmailer-2.99.56/smtpserver/policytest.c	2004-01-31 04:52:25.671518544 +0000
+@@ -691,7 +691,7 @@
+ 	openok = db_create(&rel->btree, NULL, 0);
+ 	if (openok == 0)
+ 	  openok = rel->btree->open(rel->btree,
+-#if (DB_VERSION_MAJOR == 4) && (DB_VERSION_MINOR == 1)
++#if (DB_VERSION_MAJOR == 4) && (DB_VERSION_MINOR >= 1)
+ 				    NULL, /* TXN id was added at SleepyDB 4.1 */
+ #endif
+ 				    dbname, NULL,  DB_BTREE,
+@@ -727,7 +727,7 @@
+ 	openok = db_create(&rel->bhash, NULL, 0);
+ 	if (openok == 0)
+ 	  openok = rel->bhash->open(rel->bhash,
+-#if (DB_VERSION_MAJOR == 4) && (DB_VERSION_MINOR == 1)
++#if (DB_VERSION_MAJOR == 4) && (DB_VERSION_MINOR >= 1)
+ 				    NULL, /* TXN id was added at SleepyDB 4.1 */
+ #endif
+ 				    dbname, NULL, DB_HASH,
+diff -u -r zmailer-2.99.56.orig/utils/makedb/dblook.c zmailer-2.99.56/utils/makedb/dblook.c
+--- zmailer-2.99.56.orig/utils/makedb/dblook.c	2003-05-09 07:52:17.000000000 +0000
++++ zmailer-2.99.56/utils/makedb/dblook.c	2004-01-31 04:52:08.673102696 +0000
+@@ -273,7 +273,7 @@
+     rc = db_create(&dbfile, NULL, 0);
+     if (rc == 0)
+       rc = dbfile->open(dbfile,
+-#if (DB_VERSION_MAJOR == 4) && (DB_VERSION_MINOR == 1)
++#if (DB_VERSION_MAJOR == 4) && (DB_VERSION_MINOR >= 1) 
+ 			NULL, /* TXN id was added at SleepyDB 4.1 */
+ #endif
+ 			dbasename, NULL, DB_BTREE,
+@@ -330,7 +330,7 @@
+     rc = db_create(&dbfile, NULL, 0);
+     if (rc == 0)
+       rc = dbfile->open(dbfile,
+-#if (DB_VERSION_MAJOR == 4) && (DB_VERSION_MINOR == 1)
++#if (DB_VERSION_MAJOR == 4) && (DB_VERSION_MINOR >= 1)
+ 			NULL, /* TXN id was added at SleepyDB 4.1 */
+ #endif
+ 			dbasename, NULL, DB_HASH,
+diff -u -r zmailer-2.99.56.orig/utils/makedb/makedb.c zmailer-2.99.56/utils/makedb/makedb.c
+--- zmailer-2.99.56.orig/utils/makedb/makedb.c	2003-11-06 17:10:23.000000000 +0000
++++ zmailer-2.99.56/utils/makedb/makedb.c	2004-01-31 04:52:17.211804616 +0000
+@@ -910,7 +910,7 @@
+ 	err = db_create(&dbfile, NULL, 0);
+ 	if (! err)
+ 	  err = dbfile->open(dbfile,
+-#if (DB_VERSION_MAJOR == 4) && (DB_VERSION_MINOR == 1)
++#if (DB_VERSION_MAJOR == 4) && (DB_VERSION_MINOR >= 1)
+ 			     NULL, /* TXN id was added at SleepyDB 4.1 */
+ #endif
+ 			     dbasename, NULL, DB_BTREE,
+@@ -928,7 +928,7 @@
+ 	err = db_create(&dbfile, NULL, 0);
+ 	if (! err)
+ 	  err = dbfile->open(dbfile,
+-#if (DB_VERSION_MAJOR == 4) && (DB_VERSION_MINOR == 1)
++#if (DB_VERSION_MAJOR == 4) && (DB_VERSION_MINOR >= 1)
+ 			     NULL, /* TXN id was added at SleepyDB 4.1 */
+ #endif
+ 			     dbasename, NULL, DB_HASH,
