@@ -18,7 +18,7 @@ Prereq:         %{_sbindir}/groupadd
 Prereq:         %{_sbindir}/groupdel
 URL:		http://www.zmailer.org
 Requires:	logrotate >= 2.4
-Requires:	/etc/crontab.d
+Requires:	/etc/cron.d
 Requires:	whoson >= 1.08
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel
@@ -98,7 +98,7 @@ make COPTS="$RPM_OPT_FLAGS -w" all
 rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8}
-install -d $RPM_BUILD_ROOT/etc/{crontab.d,logrotate.d,rc.d/init.d}
+install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d}
 install -d $RPM_BUILD_ROOT/{var/mail,usr/sbin}
 
 # Install main files
@@ -149,7 +149,7 @@ rm -r `find $RPM_BUILD_ROOT -name proto`
 rm -r `find $RPM_BUILD_ROOT -name bak`
 
 # Install another files
-cat  << EOF > $RPM_BUILD_ROOT/etc/crontab.d/zmailer
+cat  << EOF > $RPM_BUILD_ROOT/etc/cron.d/zmailer
 # Resubmit deferred messages
 28 */1 * * *		root	!%{_libdir}/zmailer/zmailer resubmit >/dev/null
 # Cleanout public and postman directories
@@ -256,6 +256,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+%dir /etc/mail
 %config /etc/mail/cf
 %config /etc/mail/forms
 %config /etc/mail/fqlists
@@ -272,7 +273,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(644,root,root) %config(noreplace) /etc/mail/aliases
 
 %attr(640,root,root) /etc/logrotate.d/zmailer
-%attr(640,root,root) /etc/crontab.d/zmailer
+%attr(640,root,root) /etc/cron.d/zmailer
 
 %attr(754,root,root) /etc/rc.d/init.d/zmailer
 
@@ -296,10 +297,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %attr(750,root,root) %dir /var/log/mail
 
-%doc ChangeLog,Overview,README,README.PERFORMANCE,README.SPAM
-%doc doc/guides,doc/toplevel-domains,doc/manual/FAQ,utils/usenet/usenet.sh
-%doc utils/mail2news,utils/mailgateway,doc/manual/zmanual.ps
-%doc $RPM_SOURCE_DIR/doc/zmailer-pl.txt
+%doc ChangeLog Overview README README.PERFORMANCE README.SPAM
+%doc doc/guides doc/toplevel-domains doc/manual/FAQ utils/usenet/usenet.sh
+%doc utils/mail2news utils/mailgateway doc/manual/zmanual.ps
+%doc $RPM_SOURCE_DIR/zmailer-pl.txt
 
 %files devel
 %defattr(644,root,root,755)
