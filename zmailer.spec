@@ -1,35 +1,31 @@
-%define	oversion	2.99.51-pre1
 Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
-Version:	2.99.51_pre3
-Release:	1
+Version:	2.99.51
+Release:	1.0
 Copyright:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Daemons
 Group(pl):	Demony
-Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{oversion}.tar.gz
+Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
 Source1:	zmailer-pl.txt
 Source2:	forms-pl-0.4.tar.gz
 Patch0:		zmailer-config.diff
 Patch1:		zmailer-openssl.patch
+Patch2:		zmailer-libwrap.patch
 Prereq:		/sbin/chkconfig
 URL:		http://www.zmailer.org
 Requires:	logrotate >= 2.4
 Requires:	/etc/crontab.d
 Requires:	whoson >= 1.08
-Requires:	smtpdaemon
+BuildPrereq:	libwrap-devel
 BuildPrereq:	openssl-devel
 BuildPrereq:	whoson-devel
 BuildPrereq:	openldap-devel
 BuildPrereq:	glibc-devel >= 2.1
 BuildRoot:	/tmp/%{name}-%{version}-root
 Provides:	smtpdaemon
-Conflicts:	sendmail
-Conflicts:	qmail
-Conflicts:	postfix
-Conflicts:	exim
-Conflicts:	smail
+Conflicts:	smtpdaemon
 
 %description
 This is a package that implements an internet message transfer agent called
@@ -66,12 +62,14 @@ To jest pakiet dla developerów.
 Zawiera plik nag³ówkowy i bibliotekê statyczn± ZMailera.
 
 %prep
-%setup -q -n %{name}-%{oversion}
+%setup -q -n %{name}-%{version}
 %patch0 -p1
 %patch1 -p1
-%setup -q -a 2 -D -T -n %{name}-%{oversion}
+%patch2 -p1
+%setup -q -a 2 -D -T -n %{name}-%{version}
 
 %build
+autoconf
 ZCONFIG=/etc/mail/zmailer.conf \
 ./configure %{_target_platform} \
 	--mandir=%{_mandir} \
@@ -191,12 +189,10 @@ fi
 # or provide /etc/mail/aliases it if not found.
 if [ ! -L /etc/mail/db/aliases ]; then
 	if [ -f /etc/mail/aliases ]; then
-#		echo "Generujê dowi±zanie symboliczne tak by u¿ywaæ /etc/mail/aliases w aliasach"
-#		echo "Generating Symlink to use /etc/mail/aliases for aliasing"
+		echo "Generating Symlink to use /etc/mail/aliases for aliasing"
 		rm /etc/mail/db/aliases || echo "Dziwnie pusto w (Strange nothing at) /etc/mail/db/aliases. Ale nie martw siê ... (But dont worry..)"
 	else
-#		echo "Instalujê nowe /etc/mail/aliases z przyk³adowego pliku"
-#		echo "Installing new /etc/mail/aliases from zmailer sample"
+		echo "Installing new /etc/mail/aliases from zmailer sample"
 		mv /etc/mail/db/aliases /etc/aliases
 	fi
 	ln -s ../aliases /etc/mail/db/aliases
@@ -222,7 +218,7 @@ done
 # localnames
 for x in `hostname --fqdn` `hostname --domain` `hostname --yp`; do
 	if [ -n $x ] && ! grep -q ^$x /etc/mail/db/localnames; then
-	echo "$x		`hostname --fqdn`|"
+		echo "$x		`hostname --fqdn`|"
 	fi
 done | tr -d '\n' | tr -s '|' '\n' | sort >> /etc/mail/db/localnames
 
@@ -232,14 +228,14 @@ done | tr -d '\n' | tr -s '|' '\n' | sort >> /etc/mail/db/localnames
 
 %preun
 if [ -e /var/lock/subsys/zmailer ]; then
-/etc/rc.d/init.d/zmailer stop || :
+	/etc/rc.d/init.d/zmailer stop || :
 fi
 
 rm -f /var/spool/postoffice/.pid.*
     
 if [ "$1" = 0 ]; then
-    /sbin/chkconfig --del zmailer
-    rm -f /var/log/mail/*
+	/sbin/chkconfig --del zmailer
+	rm -f /var/log/mail/*
 fi
 
 %clean
