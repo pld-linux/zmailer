@@ -3,25 +3,36 @@
 %bcond_without	whoson	# build without WHOSON support
 %bcond_without	ldap	# build without LDAP support
 %bcond_without	gdbm	# build without GDBM support
+%bcond_without  spf	# build without SPF support
 #
+
+%define _snap 20040426
+%define _rel  0.1
+
+%if "%{_snap}" != "0"
+%define snapshot snap%{_snap}.rel
+%else 
+%define snapshot %{nil}
+%endif
+
 Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
-Version:	2.99.56
-Release:	4
+Version:	2.99.57
+Release:	%{snapshot}%{_rel}
 License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
-Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
-# Source0-md5:	c94cc0c2e2427a210a046a02ac4c2d50
+Source0:	zmailer-%{_snap}.tar.bz2
+#Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
 Source1:	%{name}-pl.txt
 Source2:	forms-pl-0.4.tar.gz
 # Source2-md5:	c4ca963cd941e3ac533860d7d3d9f4b1
 Source3:	%{name}.logrotate
 Patch0:		%{name}-config.diff
-Patch1:		%{name}-ldap-lmap.patch
 Patch2:		%{name}-glibc.patch
 Patch3:		%{name}-sleepycatdb.patch
+Patch4:		%{name}-spf.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	ed
@@ -33,6 +44,7 @@ BuildRequires:	perl-devel
 %{?with_gdbm:BuildRequires:	gdbm-devel}
 %{?with_whoson:BuildRequires:	whoson-devel}
 %{?with_ldap:BuildRequires:	openldap-devel}
+%{?with_spf:BuildRequires: 	libspf_alt-devel}
 URL:		http://www.zmailer.org/
 PreReq:		rc-scripts
 Requires(pre):	grep
@@ -97,11 +109,10 @@ To jest pakiet dla developerów. Zawiera plik nag³ówkowy i bibliotekê
 statyczn± ZMailera.
 
 %prep
-%setup -q -a2
+%setup -q -a2 -n %{name}
 %patch0 -p1
-%patch1 -p0
 %patch2 -p1
-%patch3 -p1
+%patch4 -p1
 
 %build
 cp -f /usr/share/automake/config.* .
@@ -118,6 +129,7 @@ cp -f /usr/share/automake/config.* .
 	--with-ta-mmap \
 	%{?with_whoson:--with-whoson} \
 	%{?with_ldap:--with-ldap-prefix} \
+	%{?with_spf:--with-spf} \
 	--with-openssl-prexix=%{_prefix} \
 	--with-tcp-wrappers \
 	--with-ipv6 \
