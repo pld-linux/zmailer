@@ -8,7 +8,7 @@ Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
 Version:	2.99.56
-Release:	1
+Release:	1.1
 License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
@@ -191,11 +191,11 @@ rm -rf `find $RPM_BUILD_ROOT -name bak`
 # Install another files
 cat << EOF > $RPM_BUILD_ROOT/etc/cron.d/zmailer
 # Resubmit deferred messages
-28 */1 * * *		root	!%{_libdir}/zmailer/zmailer resubmit >/dev/null
+28 */1 * * *		root	! %{_libdir}/zmailer/zmailer resubmit >/dev/null
 # Cleanout public and postman directories
-7 4 * * *		root	!%{_libdir}/zmailer/zmailer cleanup >/dev/null
+7 4 * * *		root	! %{_libdir}/zmailer/zmailer cleanup >/dev/null
 # Check if services still work
-11 6,12,18,0 * * *	root	!%{_libdir}/zmailer/zmailcheck
+11 6,12,18,0 * * *	root	! %{_libdir}/zmailer/zmailcheck
 EOF
 
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/logrotate.d/zmailer
@@ -298,7 +298,7 @@ fi
 %doc utils/usenet/usenet.sh utils/mail2news utils/mailgateway
 %dir %{_sysconfdir}/mail
 %config(noreplace) %{_sysconfdir}/mail/cf
-%config %{_sysconfdir}/mail/forms
+%config(noreplace) %{_sysconfdir}/mail/forms
 %config(noreplace) %{_sysconfdir}/mail/fqlists
 
 %defattr(644,root,root,3755)
