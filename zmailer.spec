@@ -25,7 +25,7 @@ BuildRequires:	autoconf
 BuildRequires:	db3-devel
 BuildRequires:	ed
 BuildRequires:	libwrap-devel
-BuildRequires:	openssl-devel >= 0.9.7
+BuildRequires:	openssl-devel >= 0.9.7c
 BuildRequires:	pam-devel
 %{!?_without_gdbm:BuildRequires:	gdbm-devel}
 %{!?_without_whoson:BuildRequires:	whoson-devel}
