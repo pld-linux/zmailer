@@ -103,7 +103,7 @@ ZCONFIG=%{_sysconfdir}/mail/zmailer.conf \
 #	--with-yp-lib='-lyp'
 #	--prefix=%{_libdir}/zmailer \
 
-%{__make} COPTS="%{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS} -w" all
+%{__make} COPTS="%{rpmcflags} -w" all
 
 %install
 rm -rf $RPM_BUILD_ROOT
