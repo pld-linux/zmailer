@@ -1,0 +1,600 @@
+ZMailer - instalacja i konfiguracja
+(C) 1998 Jan Rychter
+
+Niniejszy artyku³ mo¿na kopiowaæ i rozprowadzaæ wy³±cznie w ca³o¶ci na
+zasadach licencji GNU w wersji 2 lub dowolnej pó¼niejszej wersji.
+
+Dla "Magazynu Linux/UNIX", wrzesieñ/98
+$Id$
+
+
+
+ZMailer - co to jest ?
+
+
+ZMailer jest szybkim i bezpiecznym MTA (Mail Transfer Agent) dla
+systemów UNIX. Zajmuje siê rozsy³aniem i przekazywaniem poczty
+elektronicznej, otrzymanej od programów MUA (Mail User Agent) takich jak
+mutt, pine, elm, od procesorów list dyskusyjnych (majordomo, petidomo,
+listserv) lub od innych maszyn w sieci. Odgrywa w systemie rolê podobn±
+do powszechnie znanego i stosowanego programu sendmail, ró¿ni siê jednak
+od niego znacznie na korzy¶æ je¿eli chodzi o bezpieczeñstwo i
+wydajno¶æ. Warto poznaæ ten program, chocia¿by dlatego, ¿e mo¿na w ten
+sposób zyskaæ zupe³nie inne spojrzenie na przetwarzanie poczty
+elektronicznej pod UNIXem.
+
+
+Po co ? Spojrzenie praktyka.
+
+
+Narzuca siê pytanie: po co w³a¶ciwie w ogóle interesowaæ siê innym MTA
+ni¿ sendmail, skoro ten jest standardowo instalowany w wiêkszo¶ci
+Linuxów ? Odpowiedzi mo¿e byæ wiele. Najlepszym powodem jest ró¿nica w
+wydajno¶ci. Sendmail ma powa¿ne ograniczenia je¿eli chodzi o prêdko¶æ
+przetwarzania poczty, wynikaj±ce z jego architektury. Eksperci znaj±cy
+siê doskonale na konfiguracji sendmaila potrafi± obej¶æ do pewnego
+stopnia niektóre z tych ograniczeñ, jest to jednak trudne, niewygodne i
+nadal nie rozwi±zuje w pe³ni problemu. ZMailer za to od pocz±tku by³
+projektowany ze specjalnym naciskiem na wydajno¶æ. Jest tak pomy¶lany,
+by jak najmniej obci±¿aj±c maszynê na której dzia³a, przekazaæ jak
+najwiêcej listów w jak najkrótszym czasie.
+
+Dobrym praktycznym przyk³adem instalacji, gdzie sendmail siê nie
+sprawdzi³, a ZMailer rozwi±za³ problemy, jest system dystrybucji list
+dyskusyjnych z maszyny vger.rutgers.edu (miêdzy innymi lista
+linux-kernel). Pocz±tkowo na vger dzia³a³ sendmail, bezpo¶rednio
+rozsy³aj±cy nowe listy do wszystkich zapisanych na listy dyskusyjne. Po
+przekroczeniu pewnej ilo¶ci osób korzystaj±cych z list, zaczê³y siê
+pojawiaæ problemy z rozsy³aniem. Opó¼nienia zaczê³y siêgaæ tygodnia.
+Wprowadzony zosta³ nieco ulepszony system tzw. "mail exploders". Polega
+on na tym, ¿e vger.rutgers.edu czê¶æ pracy przekazuje innym maszynom:
+adresami z domeny .com zajmuje siê inny komputer ni¿ adresami z
+.net. Sam vger.rutgers.edu wie, ¿e wszystkie listy dla domen .com ma
+pos³aæ jednemu "exploderowi". Zajmuje siê te¿ rozes³aniem wszystkich
+listów dla których nie ma zdefiniowanego "explodera". System ten nieco
+poprawi³ sytuacjê, jednak obci±¿enie vger.rutgers.edu by³o nadal zbyt
+du¿e. Dopiero wymiana programu sendmail na ZMailer pomog³a - i to na
+tyle dobrze, ¿e do dzi¶ system dzia³a bez problemów.
+
+ZMailer jest te¿ stosowany na wielu innych maszynach maj±cych do
+przetworzenia olbrzymie ilo¶ci poczty -- dobrymi przyk³adami s±
+np. ftp.funet.fi albo SunSITE.icm.edu.pl.
+
+
+Czy to nie jest to samo co sendmail ?
+
+
+ZMailer od sendmaila ró¿ni siê diametralnie. Jedyne co pozostaje
+podobne, to rola jak± oba programy spe³niaj± w systemie. Najwiêksz±
+praktyczn± ró¿nic± pomiêdzy nimi jest sposób przetwarzania kolejek i
+listów przeznaczonych dla wielu adresatów. Sendmail otrzymawszy do
+rozes³ania list zaadresowany do kilkuset osób z ca³ego ¶wiata (czêste w
+przypadku list dyskusyjnych) zajmie siê przetwarzaniem go
+sekwencyjnie. Najpierw spróbuje pierwszego adresu, potem
+nastêpnych. Je¿eli który¶ oka¿e siê nieprawid³owy, spowoduje opó¼nienie
+i wszystkie nastêpne bêd± musia³y poczekaæ. W praktyce opó¼nienie
+pomiêdzy otrzymaniem listu przez pierwszego adresata a ostatniego
+potrafi siêgaæ paru dni (!).
+
+Dla odró¿nienia, ZMailer najpierw analizuje nag³ówki listu i rozk³ada go
+na wiele kolejek przetwarzania (wed³ug zdefiniowanych przy konfiguracji
+zasad). Oznacza to, ¿e list zaadresowany do kilkuset osób zostanie
+rozdzielony na od kilku do kilkudziesiêciu kana³ów, z których ka¿dy
+bêdzie przetwarzany sekwencyjnie. Dla wy¿ej wspomnianego skrajnego
+przypadku (gdy sendmailowi rozes³anie listu zajmowa³o kilka dni) po
+instalacji ZMailera czas ten skróci³ siê do kilku minut.
+
+
+Czy tego samego nie potrafi QMail ?
+
+
+QMail jest w wielu aspektach podobny do ZMailera. Podobnie jak on zosta³
+zaprojektowany ca³kowicie od nowa, czerpi±c z do¶wiadczeñ innych. Jest
+równie¿ bardzo nastawiony na wydajno¶æ -- po bezpieczeñstwie jest ona
+nastêpn± najbardziej reklamowan± zalet± QMaila. Trudno jest obiektywnie
+stwierdziæ, czy którykolwiek z nich jest lepszy pod wzglêdem
+technicznym. Prawdopodobnie w realnej pracy ró¿nice bêd±
+niewielkie. QMail jest za to nielubiany przez wielu z powodu do¶æ
+restrykcyjnej licencji oraz nieco dziwnego podej¶cia autora programu do
+specyfikacji RFC (Internetowych Request For Comments, czyli
+pó³formalnych standardów obowi±zuj±cych w sieci). QMail implementuje z
+RFC to, co autor uzna³ za stosowne -- resztê odrzuca. Powoduje to, ¿e
+czasem zachowuje siê w sposób inny od wszystkich innych programów MTA i
+niekoniecznie stosuje siê do wszystkich standardów.
+
+
+Architektura
+
+
+ZMailer nie jest programem monolitycznym. Sk³ada siê z wielu procesów,
+wspó³pracuj±cych ze sob±. Trzy z nich s± najwa¿niejsze i pracuj± w
+systemie praktycznie ca³y czas:
+
+  smtpserver -- zajmuje siê s³uchaniem na porcie TCP 25 i przyjmowaniem
+  przychodz±cych t± drog± listów. Potrafi te¿ wstêpnie filtrowaæ pocztê,
+  odrzucaj±c t± niechcian± (spam, reklamy). Poniewa¿ odrzuca pocztê
+  jeszcze na etapie przyjmowania jej, listy takie nie zajmuj± ani miejsca
+  na dysku ani pasma sieciowego.
+
+  router -- przetwarza nag³ówki poczty. Pobiera pocztê któr± przyj±³
+  smtpserver, b±d¼ t± któr± dosta³ do wys³ania lokalnie od jakiego¶ MUA,
+  nastêpnie przegl±da i ewentualnie przepisuje (modyfikuje) nag³ówki,
+  sprawdza istnienie adresów w DNS, rozwija aliasy oraz tworzy
+  odpowiedni plik kontrolny. Routerów w systemie mo¿e byæ kilka (z
+  regu³y cztery), dla przyspieszenia przetwarzania poczty i unikniêcia
+  opó¼nieñ wprowadzanych przez DNS.
+
+  scheduler -- zleca rozsy³anie poczty. Czyta pliki kontrolne stworzone
+  przez router, rozdziela pocztê na kana³y przetwarzania (kolejki), oraz w
+  odpowiednim czasie uruchamia programy TA celem dostarczenia poczty.
+
+Ponadto, istnieje pewna liczba "transfer agents" (TA) które zajmuj± siê
+dostarczaniem poczty ró¿nymi protoko³ami. Przyk³adami s±: smtp
+(dostarcza pocztê protoko³em SMTP), mailbox (dostarcza do lokalnych
+skrzynek pocztowych), sm (konfigurowalny osobno TA kompatybilny z
+sendmailem pozwalaj±cy np. na tworzenie bramek mail2news lub spiêcie z
+programem Cyrus IMAP), errormail (zajmuje siê dostarczeniem komunikatów
+o b³êdach, jest bardziej wra¿liwy na mo¿liwe problemy i pêtle pocztowe)
+itp.
+
+Warto zauwa¿yæ, ¿e w powy¿szej li¶cie jedynym programem który musi byæ
+uruchomiony z prawami roota (uid 0) jest smtpserver -- musi on
+nas³uchiwaæ na porcie 25, a to wymaga praw roota. Ca³a reszta systemu
+mo¿e pracowaæ np. jako u¿ytkownik nobody i w naprawdê bezpiecznych
+instalacjach tak w³a¶nie siê to konfiguruje. Znakomicie podnosi to
+bezpieczeñstwo ca³ego systemu, gdy¿ ogranicza siê mo¿liwo¶ci w³amania do
+jednego programu, który jest dok³adnie pod wzglêdem bezpieczeñstwa
+zbadany. Ponadto, warto zauwa¿yæ, ¿e smtpserver nie musi byæ wykonywalny
+przez lokalnych u¿ytkowników. Odcina to kolejn± klasê w³amañ poprzez
+uruchamianie programów "setuid root" z nieprawid³owymi opcjami. Miêdzy
+innymi w³a¶nie dlatego okre¶la siê ZMailer jako program bezpieczny.
+
+Dla odró¿nienia sendmail zawiera siê w jednym procesie (programie),
+który robi wszystko, zale¿nie od opcji z jakimi siê go
+uruchomi. Musi on byæ uruchamiany z prawami roota (uid 0) z tych samych
+powodów co smtpserver w ZMailerze. W tym przypadku jednak mo¿liwo¶ci na
+wykorzystanie ewentualnych dziur jest znacznie wiêcej -- szczególnie ¿e
+sendmail jest programem uruchamianym przez lokalnych u¿ytkowników w
+systemie i bardzo trudno jest tego unikn±æ.
+
+
+... a konkretniej ?
+
+
+Obszar roboczy ZMailera (spool, postoffice) podzielony jest na kilka
+podkatalogów. Najwa¿niejsze z nich to:
+
+  public/ -- w tym katalogu u¿ytkownicy mog± tworzyæ pocztê do wys³ania.
+  Z regu³y zajmuje siê tym program MUA u¿ytkownika uruchamiaj±c program
+  /usr/lib/sendmail, który jest podstawion± przez ZMailera emulacj±
+  sendmaila.
+
+  router/ -- do tego katalogu poprzez operacjê rename() przerzucana jest
+  (atomicznie) poczta z katalogu public. Poczta nigdy nie jest tu
+  tworzona, aby unikn±æ sytuacji w której proces router zauwa¿y³by i
+  zacz±³ przetwarzaæ list, który nie zosta³ jeszcze do koñca utworzony
+  (skopiowany).
+
+  queue/, transport/ -- katalogi robocze s³u¿±ce do rozsy³ania poczty. Gdy
+  router zakoñczy przetwarzanie nag³ówków poczty, przenosi (równie¿
+  u¿ywaj±c rename()) list z katalogu router/ do queue/, za¶ w transport/
+  tworzy plik kontrolny dla tego listu. Katalog transport/ ogl±da proces
+  scheduler, zlecaj±c rozes³anie listów w odpowiednim czasie.
+
+Istniej± te¿ katalogi freezer/ i postman/, s³u¿± one do specjalnych
+celów. W katalogu freezer/ pojawia siê poczta któr± smtpserver
+podejrzewa o bycie niepo¿±dan± (element konfiguracji
+anty-spammingowych). Zatrzymana jest do obejrzenia i ew. pos³ania
+dalej. W katalogu postman/ zapisywane s± listy, które absolutnie nie
+mog± byæ dostarczone z powodu nadmiernych ilo¶ci b³êdów, nie mog± te¿
+byæ zwrócone do nadawcy (przypadki raczej patologiczne).
+
+
+Instalacja
+
+
+Oprogramowanie znale¼æ mo¿na w katalogu
+ftp://SunSITE.icm.edu.pl/pub/unix/mail/zmailer/src/. W chwili pisania
+tego artyku³u najnowsz± wersj± ZMailera by³a wersja 2.99.50-s5. Byæ mo¿e
+gdy pismo uka¿e siê w druku, bêdzie ju¿ od dawna oczekiwana wersja
+3.0. Oprogramowanie nale¿y rozpakowaæ np. w /usr/src i wej¶æ do
+utworzonego podkatalogu. Warto te¿ w tym momencie zerkn±æ na
+dokumentacjê dostêpn± pod adresem http://www.zmailer.org/.
+
+ZMailer przygotowywany jest do kompilacji przy u¿yciu programu GNU
+autoconf, wiêc w zasadzie wystarczy napisaæ ./configure; make aby go
+skompilowaæ. Warto jednak przyjrzeæ siê niektórym dostêpnym opcjom
+configure:
+
+--prefix=/katalog -- umiejscawia drzewo katalogów ZMailera. Pod tym
+katalogiem zostanie utworzonych kilka innych. Znajd± siê tam zarówno
+programy wykonywalne, jak i pliki konfiguracyjne ZMailera. Polecam
+ustawienie --prefix=/local/lib/mail (gdzie /local jest linkiem do
+/usr/local).
+
+--with-mailbox=/katalog -- gdzie znajduj± siê skrzynki E-pocztowe
+u¿ytkowników do których ma byæ dostarczana lokalna poczta. Z regu³y w
+Linuxie jest to katalog /var/spool/mail.
+
+--with-postoffice=/katalog -- gdzie ZMailer ma przetwarzaæ pocztê
+(tzw. spool). Jest to katalog, gdzie utworzone bêd± podkatalogi: public,
+router, transport, queue. Standardowo zaleca siê /var/spool/postoffice.
+
+--with-logdir=/katalog -- gdzie maj± byæ umieszczane logi ZMailera.
+
+--with-selfaddresses= -- adresy na których smtpserver ma nas³uchiwaæ na
+porcie 25. Podawane w formacie [10.2.1.1],[127.0.0.1].
+
+--with-sendmailpath= -- gdzie ma zostaæ umieszczony podmieniony program
+sendmail (emuluj±cy lokalnie prawdziwego sendmaila i s³u¿±cy do
+wysy³ania poczty).
+
+--with-ipv6 -- w³±czenie wsparcia dla IP w wersji szóstej.
+
+Warto zwróciæ uwagê na poprawne wpisanie wszystkich adresów IP na
+których smtpserver ma s³uchaæ. W przypadku komputera z jednym adresem
+nie stanowi to problemu, jednak je¶li maszyna ma kilka adresów, nale¿y
+wpisaæ je wszystkie.
+
+Po napisaniu ./configure z odpowiednimi opcjami ZMailer powinien byæ
+gotowy do kompilacji. Sam± kompilacjê uruchamia siê komend± make,
+zainstalowaæ program mo¿na przez make install. Warto zwróciæ uwagê, czy
+podczas instalacji nie pracuje proces sendmail. Najlepiej wcze¶niej po
+prostu usun±æ sendmail z systemu, nie bêdzie ju¿ do niczego potrzebny.
+
+
+Ci±g dalszy: konfiguracja -- w nastêpnym odcinku.
+
+[ stopka:
+
+RG Studio zajmuje siê doradztwem Linux/UNIX, instalacjami systemów,
+utrzymaniem i zabezpieczaniem istniej±cych instalacji, oraz sprzeda¿±
+specjalizowanego sprzêtu zwi±zanego z Linuxem: kart frame-relay Sangoma
+Technologies i Emerging Technologies, mikroserwerów Cobalt Qube firmy
+Cobalt Networks, p³yt g³ównych i procesorów Samsung Alpha, a tak¿e kart
+wieloportowych Cyclades i sprzêtu Gigabit Ethernet firmy Packet
+Engines. Kontakt: E-poczta: info@rgstudio.com.pl, WWW:
+http://www.rgstudio.com.pl/, Adres: RG Studio, Limanowskiego 23, 02-934
+Warszawa, Tel./Fax.: (22) 6516638.
+
+Z autorem mo¿na skontaktowaæ siê pod adresem: Jan Rychter
+<jwr@rgstudio.com.pl>
+
+]
+
+
+
+ZMailer - instalacja i konfiguracja, czê¶æ 2
+(C) 1998 Jan Rychter
+
+Niniejszy artyku³ mo¿na kopiowaæ i rozprowadzaæ wy³±cznie w ca³o¶ci na
+zasadach licencji GNU w wersji 2 lub dowolnej pó¼niejszej wersji.
+
+Dla "Magazynu Linux/UNIX", wrzesieñ/98
+$Id$
+
+ [ ZMailer jest szybkim i bezpiecznym MTA (Mail Transfer Agent) dla
+   systemów UNIX. Zajmuje siê rozsy³aniem i przekazywaniem poczty
+   elektronicznej, otrzymanej od programów MUA (Mail User Agent) takich jak
+   mutt, pine, elm, od procesorów list dyskusyjnych (majordomo, petidomo,
+   listserv) lub od innych maszyn w sieci. Odgrywa w systemie rolê podobn±
+   do powszechnie znanego i stosowanego programu sendmail, ró¿ni siê jednak
+   od niego znacznie na korzy¶æ je¿eli chodzi o bezpieczeñstwo i
+   wydajno¶æ. W poprzedniej czê¶ci opisana zosta³a jego architektura i
+   sposób kompilacji, w tej zajmê siê instalacj± i konfiguracj±. ]
+
+
+Instalacja, uruchamianie
+
+
+Sama instalacja poprawnie skompilowanego ZMailera sprowadza siê w
+zasadzie do wydania komendy "make install". Reszta powinna przebiegaæ
+automatycznie. Warto jednak zwróciæ uwagê na zainstalowanie poprawnego
+skryptu startuj±cego ZMailer przy starcie systemu i zatrzymuj±cego go
+przy wy³±czaniu systemu. Nie bêdzie on skomplikowany, gdy¿ poprawnym
+uruchomieniem (i zatrzymaniem) wszystkich procesów ZMailera zajmuje siê
+jego w³asny skrypt "zmailer". Dla ¶cie¿ek podanych w poprzedniej czê¶ci
+artyku³u znajdzie siê on w katalogu /local/lib/mail/bin.
+
+Uruchomienie ZMailera odbywa siê wiêc poprzez:
+
+/local/lib/mail/bin/zmailer
+
+za¶ zatrzymanie poprzez:
+
+/local/lib/mail/bin/zmailer kill
+
+Warto zwróciæ uwagê, ¿e wieloprocesowa architektura ZMailera umo¿liwia
+zatrzymywanie i uruchamianie poszczególnych jego czê¶ci, bez wp³ywu na
+dzia³anie pozosta³ych. Przydatne warianty to na przyk³ad:
+
+ -- zmailer kill router -- zatrzymanie procesu router. System bêdzie
+    nadal przyjmowa³ pocztê (zajmuje siê tym smtpserver) i wysy³a³ ju¿
+    przetworzon± pocztê (co z kolei nadzoruje scheduler).
+ -- zmailer kill scheduler -- system bêdzie przyjmowa³ pocztê i
+    przetwarza³ j±, ale nie bêdzie rozsy³a³ ani dostarcza³
+    lokalnie. Szczególnie przydatne dla systemów które tylko czasowo s±
+    pod³±czane do Internetu, ZMailer z wy³±czonym schedulerem zachowuje siê
+    podobnie jak sendmail z opcj± "queueonly".
+ -- zmailer kill smtpserver -- system bêdzie przetwarza³ pocztê
+    znajduj±c± siê ju¿ w kolejkach, a tak¿e j± rozsy³a³, nie przyjmie za to
+    nic nowego poprzez SMTP. Przydatne w (rzadkich) przypadkach
+    przeci±¿enia.
+
+Ka¿dy z procesów mo¿na oczywi¶cie uruchomiæ, komendami:
+    zmailer router
+    zmailer scheduler
+    zmailer smtpserver
+
+Rzecz jasna okre¶lenie "proces" jest w tym kontek¶cie umowne, gdy¿
+np. procesów typu "router" mo¿e w systemie byæ wiele.
+
+
+Routing poczty
+
+
+Pierwszym krokiem przy konfiguracji ZMailera jest zapewnienie mu
+odpowiedniego pliku konfiguracyjnego dla procesu "router". Standardowa
+konfiguracja "SMTP+UUCP.cf" z pewno¶ci± wystarczy dla wiêkszo¶ci
+przypadków. Nale¿y ten plik skopiowaæ (lub podlinkowaæ) do katalogu
+/local/lib/mail (lub innego w którym zainstalowany zosta³ ZMailer) pod
+nazw± "router.cf". Przy pierwszym uruchomieniu ZMailer "skompiluje"
+sobie ten plik do zoptymalizowanej postaci, której nada nazwê
+"router.fc".
+
+Nastêpnie nale¿y zajrzeæ do katalogu /local/lib/mail/db. Znajduje siê
+tam plik "routes", pocz±tkowo zawieraj±cy tylko komentarze. S³u¿y on do
+konfiguracji "routingu" poczty elektronicznej. Pojêcie to jest nieco
+nietypowe dla innych MTA ni¿ ZMailer, stanowi jednak bardzo wygodny
+mechanizm do konfigurowania niestandardowego rozprowadzania poczty.
+
+Poszczególne linie w pliku "routes" s± w postaci:
+
+nazwa    kana³!komu_przekazaæ
+
+"nazwa" dopasowywana jest do czê¶ci adresu po znaku "@", przy czym mo¿na
+u¿ywaæ nazw .domena dla oznaczenia wszystkiego co ta domena zawiera.
+
+"kana³" odpowiada odpowiedniemu kana³owi skonfigurowanemu w pliku
+"scheduler.conf".
+
+Znaczenie parametru "komu_przekazaæ" zale¿y od rodzaju kana³u. Dla
+"smtp" jest to po prostu adres nastêpnej maszyny której nale¿y przekazaæ
+pocztê.
+
+Przyk³ad:
+
+.pl             smtp!smtp-gw.rgstudio.com.pl
+.rgstudio       smtps!intranet.rgstudio.com.pl
+
+Powy¿sze linie oznaczaj±, ¿e poczta z adresami koñcz±cymi siê na .pl
+przekazana zostanie maszynie "smtp-gw.rgstudio.com.pl", za¶ poczta z
+adresami .rgstudio (wewnêtrzna domena, nie istniej±ca w Internecie)
+komputerowi "intranet", ale przez specjalny kana³ "smtps"
+(skonfigurowany w "scheduler.conf" i zapewniaj±cy szyfrowanie). Ka¿dy
+inny list bêdzie traktowany indywidualnie, komputer który konfigurujemy
+bêdzie go sam próbowa³ wys³aæ w ¶wiat.
+
+Nale¿y pamiêtaæ, ¿e ca³y plik "routes" musi byæ zawsze posortowany,
+w³±cznie z komentarzami.
+
+
+Nazwy kanoniczne
+
+
+Plik /local/lib/mail/db/localnames jest odpowiednikiem pliku
+"sendmail.cw" w konfiguracji sendmaila. Daje jednak nieco wiêcej
+mo¿liwo¶ci, gdy¿ specyfikuje siê w nim rozwiniêcia lokalnych nazw
+komputera, u¿ywane pó¼niej przy przepisywaniu nag³ówków i dostarczaniu
+poczty.
+
+Przyk³adowo:
+
+intranet                 intranet.rgstudio.com.pl
+intranet-gw              intranet.rgstudio.com.pl
+intranet.rgstudio.com.pl intranet.rgstudio.com.pl
+localhost                intranet.rgstudio.com.pl
+localhost.localdomain    intranet.rgstudio.com.pl
+
+W tym przyk³adzie maszyna o nazwie kanonicznej
+"intranet.rgstudio.com.pl" odbieraæ bêdzie jako przeznaczon± dla siebie
+pocztê adresowan± na wszystkie nazwy wystêpuj±ce po lewej stronie. Nawet
+w przypadku gdy otrzyma pocztê adresowan± dla "intranet-gw", ca³e dalsze
+przetwarzanie bêdzie siê odbywaæ tak samo, jakby by³a adresowana dla
+"intranet".
+
+Nale¿y pamiêtaæ, ¿e podobnie jak plik "routes", ca³y plik "localnames"
+musi byæ zawsze posortowany, w³±cznie z komentarzami.
+
+
+Aliasy, aliasy FQDN
+
+
+Plik definiuj±cy aliasy w ZMailerze znajduje siê (w naszej instalacji) w
+katalogu /local/lib/mail/db. Od¶wie¿enie bazy aliasów odbywa siê po
+wykonaniu komendy "newaliases". Warto zwróciæ uwagê na to, by zosta³a
+wykonana w³a¶ciwa komenda "newaliases", ta z katalogu z binariami
+ZMailera. Czêsto przez przeoczenie pozostaje w systemie "newaliases" z
+programu sendmail.
+
+Warto te¿ przyjrzeæ siê sposobowi definiowania aliasów w ZMailerze. Nie
+jest on identyczny do tego z sendmaila. W szczególno¶ci, ZMailer wymaga
+by prawe strony bardziej skomplikowanych aliasów wystêpowa³y w
+cudzys³owach. Dla przyk³adu:
+
+autoanswer: "|/local/lib/mail/bin/autoanswer.pl"
+lista-outgoing: ":include:/local/majordomo/lists/lista"
+staff: "jwr,mk"
+
+Lewa strona wszystkich aliasów powinna byæ z³o¿ona wy³±cznie z ma³ych
+liter, nie mo¿na te¿ definiowaæ aliasów zawieraj±cych znak
+kropki. Jedynym sposobem na dostarczanie poczty na adresy rodzaju
+"Imiê.Nazwisko@domena" w ZMailerze jest baza "fullnames".
+
+Bazê "fullnames" tworzy siê w prosty sposób. Jest to plik (w naszej
+instalacji w katalogu "/local/lib/mail/db") "fullnames", zawieraj±cy
+pary "Imiê.Nazwisko: login". Do od¶wie¿ania s³u¿y komenda "newaliases
+fullnames". Tak utworzona baza jest automatycznie wykorzystywana przy
+nastêpnym uruchomieniu procesu "router".
+
+Ciekawym mechanizmem jest baza "fqdnaliases". Do tych aliasów
+przychodz±ca poczta dopasowywana jest przed jakimkolwiek innym
+przetwarzaniem. Pozwalaj± one miêdzy innymi na obs³ugê "domen
+wirtualnych" w do¶æ prosty sposób:
+
+uzytkownik@inna-domena.com.pl: lokalny-uzytkownik@rgstudio.com.pl
+
+Oczywi¶cie jedynie "lokalny-uzytkownik" musi istnieæ lokalnie, za¶
+"uzytkownik" bêdzie istnieæ tylko z adresem
+"uzytkownik@inna-domena.com.pl. Wys³anie poczty na adres
+"uzytkownik@rgstudio.com.pl" zakoñczy siê b³êdem. Do od¶wie¿ania tej
+bazy s³u¿y komenda "newfqdnaliases".
+
+W ZMailerze istnieje te¿ rozbudowany mechanizm definiowania bardzo
+szybko przetwarzanych list dyskusyjnych (z automatycznie definiowanymi i
+rozpoznawanymi aliasami lista-owner, lista-request itp), o którym byæ
+mo¿e napiszê w jednym z kolejnych artyku³ów. Jest on znacznie
+optymalniejszy i ³atwiejszy w u¿yciu ni¿ definiowanie list na wzór
+programu "sendmail" (dyrektywa ":include:").
+
+
+Konfiguracja dostarczania poczty
+
+
+ZMailer pozwala na daleko id±ce konfigurowanie sposobu dostarczania
+poczty. Poczta w systemie dzielona jest na tzw. kana³y, których
+przetwarzaniem zajmuje siê proces "scheduler". Uruchamia on odpowiednie
+programy dostarczaj±ce pocztê ("transfer agents").
+
+Dok³adny opis pliku konfiguracyjnego "scheduler.conf" wykracza niestety
+poza ramy tego artyku³u, przytoczê wiêc jedynie dwa do¶æ przydatne
+przyk³ady:
+
+smtp/*.pl
+        expiry=7d
+        maxta=60
+        command="smtp -s"
+
+Ten przyk³ad przed³u¿a czas przez jaki próbujemy dostarczyæ pocztê do
+siedmiu dni, pozwala te¿ na uruchomienie a¿ do 60 (!) równolegle
+pracuj±cych procesów dostarczaj±cych pocztê. Wszystko to tylko dla
+adresów w domenie .pl, pozosta³e adresy przetwarzane s± zgodnie ze
+standardowymi parametrami.
+
+local/*
+        expiry=3d
+        command="sm -8c $channel cyrus"
+
+W tym przypadku wymieniamy lokalny program dostarczaj±cy pocztê na "sm"
+(o którym dalej) z parametrem "cyrus". Cyrus-IMAP jest to system
+przeznaczony dla wiêkszych providerów internetowych, pozwala na ³atw± i
+wydajn± obs³ugê du¿ych ilo¶ci kont E-pocztowych z dostêpem poprzez
+protokó³ IMAP.
+
+
+Kompatybilno¶æ z programem "sendmail"
+
+
+ZMailer zawiera dwa istotne elementy s³u¿±ce do zapewnienia zgodno¶ci z
+programem "sendmail". Jeden, to sam program o nazwie "sendmail",
+zapewniaj±cy wiêkszo¶æ opcji z linii komend prawdziwego sendmaila i
+pozwalaj±cy na bezbolesne wpiêcie ZMailera w istniej±ce systemy. S³u¿y
+on do wysy³ania poczty lokalnie.
+
+Drugim takim elementem jest program ("transfer agent") o nazwie
+"sm". Pozwala on na definiowanie lokalnych sposobów dostarczania poczty
+w sposób podobny do sendmaila. Jego plikiem konfiguracyjnym jest
+"sm.conf", w którym definiowaæ mo¿na przyk³adowo:
+
+# wy¿ej wspomniane po³±czenie z systemem Cyrus-IMAP
+cyrus   Pn      /usr/cyrus/bin/deliver          deliver -e -m $h -- $u
+# procmail jako program dostarczaj±cy pocztê lokalnie
+procm   sSPfn   /usr/local/bin/procmail         procmail -a $h -d $u
+
+Pierwszy parametr to nazwa kana³u, odpowiada ona wpisowi w polu
+"command" odpowiedniej sekcji "scheduler.conf". Pozosta³e parametry
+wzorowane s± na konfiguracji programu sendmail.
+
+
+Kontrola przekazywania poczty ("relaying")
+
+
+Aby zabezpieczyæ siê przed nieoczekiwanym wykorzystaniem naszego systemu
+jako otwartego przeka¼nika pocztowego ("open mail relay") przez firmy
+rozsy³aj±ce masowo niechcian± reklamê (spam), warto poprawnie
+skonfigurowaæ zasady na jakich nasz system pocztê bêdzie
+przekazywa³. S³u¿y do tego zestaw plików "smtp-policy.*" (w naszej
+instalacji w katalogu /local/lib/mail/db). Podstawowym plikiem jest
+"smtp-policy.src", z którego generowana jest baza regu³ek antyspamowych.
+Dok³adny opis wszystkich mo¿liwo¶ci filtrowania poczty oraz stosowanego
+algorytmu nie zmie¶ci³by siê w ramach tego artyku³u, poprzestanê wiêc na
+opisaniu pokrótce kilku przyk³adów. Pe³en algorytm i sporo przyk³adów
+podanych jest w pliku "smtp-policy.src".
+
+Najistotniejsz± rzecz± jest zdefiniowanie standardowej polityki naszego
+systemu odno¶nie przekazywania poczty. Zaleca siê dwie nastêpuj±ce
+linijki:
+
+.                     relaycustomer - relaytarget - senderokwithdns +
+[0.0.0.0]/0           relaycustomer - relaytarget - senderokwithdns +
+
+Oznaczaj± one, ¿e o ile dalej nie wyspecyfikujemy inaczej, nie pozwalamy
+na ¿adne przekazywanie poczty przez nasz system oraz wymuszamy
+sprawdzanie istnienia domeny wysy³aj±cego w DNS. Rzecz jasna system
+nadal bêdzie przyjmowaæ pocztê zaadresowan± do siebie (czyli do maszyn i
+domen zapisanych w pliku localnames) oraz pozwala³ na wysy³anie poczty
+od siebie do ca³ego ¶wiata.
+
+Do od¶wie¿ania bazy regu³ anti-relay s³u¿y skrypt
+"policy-builder.sh". Warto zmodyfikowaæ go nieco do w³asnych
+potrzeb. Oryginalny (w ¼ród³ach ZMailera) u¿ywa programu "lynx" by
+¶ci±gn±æ z sieci listê adresów i domen znanych z rozsy³ania reklam do
+pliku "smtp-policy.spam". U¿ywa te¿ plików "localnames",
+"smtp-policy.relay" i "smtp-policy.mx" do wygenerowania uproszczonej
+konfiguracji. Polityka przyjmowania i przekazywania poczty na ka¿dym
+systemie jest inna, warto wiêc spêdziæ trochê czasu nad poprawnym i
+starannym skonfigurowaniem tego.
+
+Wszelkie decyzje podjête na temat przyjmowanej poczty bêd± zapisane
+przez proces "smtpserver" w jego logach (w naszej instalacji:
+"/var/log/mail/smtpserver"), wraz z komunikatami jakie zosta³y odes³ane
+³±cz±cym siê klientom w przypadku odrzucenia.
+
+
+Podsumowanie
+
+
+Szczegó³owe opisanie mo¿liwo¶ci konfiguracji ZMailera wymaga³oby ca³ej
+serii artyku³ów, z konieczno¶ci wiêc ograniczy³em siê do opisania tylko
+podstawowych opcji. Jest to program który pozwala na bardzo du¿o, jest
+te¿ o wiele logiczniejszy w konfiguracji ni¿ sendmail (szczególnie jêzyk
+skryptów routera poczty).
+
+Istnieje mo¿liwo¶æ (je¶li bêdzie zainteresowanie) przed³u¿enia cyklu
+artyku³ów o ZMailerze i szerszego opisania (wraz z przyk³adami)
+konkretnych aspektów jego konfiguracji, lub konkretnych rozwi±zañ
+(przyk³adowo: ZMailer+Cyrus, ZMailer+listy dyskusyjne na du¿± skalê,
+ZMailer+filtrowanie poczty przez RBL -- Realtime Black Hole). Piszcie do
+redakcji na adres <redakcja@tao.com.pl> -- dajcie znaæ co s±dzicie o
+artyku³ach które ju¿ siê pojawi³y i o czym chcieliby¶cie przeczytaæ.
+
+
+[ stopka:
+
+RG Studio zajmuje siê doradztwem Linux/UNIX, instalacjami systemów,
+utrzymaniem i zabezpieczaniem istniej±cych instalacji, oraz sprzeda¿±
+specjalizowanego sprzêtu zwi±zanego z Linuxem: kart frame-relay Sangoma
+Technologies i Emerging Technologies, mikroserwerów Cobalt Qube firmy
+Cobalt Networks, p³yt g³ównych i procesorów Samsung Alpha, a tak¿e kart
+wieloportowych Cyclades i sprzêtu Gigabit Ethernet firmy Packet
+Engines. Kontakt: E-poczta: info@rgstudio.com.pl, WWW:
+http://www.rgstudio.com.pl/, Adres: RG Studio, Limanowskiego 23, 02-934
+Warszawa, Tel./Fax.: (22) 6516638.
+
+Z autorem mo¿na skontaktowaæ siê pod adresem: Jan Rychter
+<jwr@rgstudio.com.pl>
+
+]
+
+
+
