@@ -1,19 +1,19 @@
 #
 # Conditional build:
-# _without_whoson	- without WHOSON support
-# _without_ldap		- without LDAP support
-# _without_gdbm		- without GDBM support
+%bcond_without	whoson	# build without WHOSON support
+%bcond_without	ldap	# build without LDAP support
+%bcond_without	gdbm	# build without GDBM support
 #
 Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
-Version:	2.99.55
-Release:	4
+Version:	2.99.56
+Release:	1
 License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
 Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
-# Source0-md5:	00dc1d3dc28205ba8c4f0fee8c4c7dce
+# Source0-md5:	c94cc0c2e2427a210a046a02ac4c2d50
 Source1:	%{name}-pl.txt
 Source2:	forms-pl-0.4.tar.gz
 # Source2-md5:	c4ca963cd941e3ac533860d7d3d9f4b1
@@ -27,9 +27,9 @@ BuildRequires:	ed
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.7c
 BuildRequires:	pam-devel
-%{!?_without_gdbm:BuildRequires:	gdbm-devel}
-%{!?_without_whoson:BuildRequires:	whoson-devel}
-%{!?_without_ldap:BuildRequires:	openldap-devel}
+%{?with_gdbm:BuildRequires:	gdbm-devel}
+%{?with_whoson:BuildRequires:	whoson-devel}
+%{?with_ldap:BuildRequires:	openldap-devel}
 URL:		http://www.zmailer.org/
 PreReq:		rc-scripts
 Requires(pre):	grep
@@ -41,7 +41,7 @@ Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires:	/etc/cron.d
 Requires:	logrotate >= 2.4
-%{!?_without_whoson:Requires:	whoson >= 1.08}
+%{?with_whoson:Requires:	whoson >= 1.08}
 Provides:	smtpdaemon
 Obsoletes:	smtpdaemon
 Obsoletes:	exim
@@ -108,8 +108,8 @@ statyczn± ZMailera.
 	--with-mailbin=%{_libdir}/zmailer \
 	--with-mailvar=%{_sysconfdir}/mail \
 	--with-ta-mmap \
-	%{!?_without_whoson:--with-whoson} \
-	%{!?_without_ldap:--with-ldap-prefix} \
+	%{?with_whoson:--with-whoson} \
+	%{?with_ldap:--with-ldap-prefix} \
 	--with-openssl-prexix=%{_prefix} \
 	--with-tcp-wrappers \
 	--with-ipv6 \
