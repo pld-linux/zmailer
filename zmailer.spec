@@ -53,7 +53,7 @@ SSL oraz TLS.
 Summary:	Static library and header file for zmailer
 Summary(pl):	Plik nag³ówkowy i biblioteka statyczna dla zmailera
 Group:		Development/Libraries
-Group(pl):	Programowanie/biblioteki
+Group(pl):	Programowanie/Biblioteki
 Requires:	%{name} = %{version}
 
 %description devel
