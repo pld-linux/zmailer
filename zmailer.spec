@@ -2,7 +2,7 @@ Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
 Version:	2.99.51
-Release:	1.0
+Release:	2
 License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
@@ -12,8 +12,7 @@ Source1:	zmailer-pl.txt
 Source2:	forms-pl-0.4.tar.gz
 Source3:	zmailer.logrotate
 Patch0:		zmailer-config.diff
-Patch1:		zmailer-openssl.patch
-Patch2:		zmailer-libwrap.patch
+Patch1:		zmailer-libwrap.patch
 Prereq:		/sbin/chkconfig
 Prereq:		%{_sbindir}/groupadd
 Prereq:		%{_sbindir}/groupdel
@@ -71,7 +70,6 @@ statyczn± ZMailera.
 %setup -q -n %{name}-%{version}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 %setup -q -a 2 -D -T -n %{name}-%{version}
 
 %build
@@ -93,8 +91,12 @@ ZCONFIG=%{_sysconfdir}/mail/zmailer.conf \
 	--includedir=%{_includedir} \
 	--with-whoson \
 	--with-ldap-prefix \
+	--with-openssl-prexix=%{_prefix} \
+	--with-tcp-wrappers \
 	--with-ipv6 \
 	--with-mailbox=/var/mail
+#	--with-yp \
+#	--with-yp-lib='-lyp'
 
 %{__make} COPTS="$RPM_OPT_FLAGS -w" all
 
