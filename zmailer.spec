@@ -16,6 +16,7 @@ Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
 # Source0-md5:	00dc1d3dc28205ba8c4f0fee8c4c7dce
 Source1:	%{name}-pl.txt
 Source2:	forms-pl-0.4.tar.gz
+# Source2-md5:	c4ca963cd941e3ac533860d7d3d9f4b1
 Source3:	%{name}.logrotate
 Patch0:		%{name}-config.diff
 Patch1:		%{name}-acfix.patch
