@@ -1,7 +1,7 @@
 Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
-Version:	2.99.50s19
+Version:	2.99.50s20cvs
 Release:	1
 Copyright:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
@@ -9,7 +9,7 @@ Group:		Daemons
 Group(pl):	Demony
 Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
 Source1:	zmailer-pl.txt
-Source2:	forms-pl-0.3.tar.gz
+Source2:	forms-pl-0.4.tar.gz
 Patch0:		zmailer-config.diff
 Patch1:		zmailer-openssl.patch
 Prereq:		/sbin/chkconfig
@@ -92,7 +92,6 @@ ZCONFIG=/etc/mail/zmailer.conf \
 	--with-mailbox=/var/mail
 
 make COPTS="$RPM_OPT_FLAGS -w" all
-make -C doc/manual html
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -283,7 +282,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755,root,root) %dir /var/spool/postoffice/transport
 %attr(0755,root,root) %dir /var/spool/postoffice/transport/*
 %attr(0755,root,root) %dir /var/spool/postoffice/queue/*
-%attr(0775,root,mail) %dir /var/mail
+%attr(1777,root,mail) %dir /var/mail
 
 %attr(750,root,root) %dir /var/log/mail
 
