@@ -95,7 +95,7 @@ ZCONFIG=%{_sysconfdir}/mail/zmailer.conf \
 	--with-ipv6 \
 	--with-mailbox=/var/mail
 
-make COPTS="$RPM_OPT_FLAGS -w" all
+%{__make} COPTS="$RPM_OPT_FLAGS -w" all
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -105,7 +105,7 @@ install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
 	$RPM_BUILD_ROOT/{var/mail,usr/sbin}
 
 # Install main files
-make install \
+%{__make} install \
 	prefix=$RPM_BUILD_ROOT \
 	MAILVAR=$RPM_BUILD_ROOT%{_sysconfdir}/mail \
 	libdir=$RPM_BUILD_ROOT%{_libdir} \
@@ -126,7 +126,7 @@ ln -fs ../lib/zmailer/zmailer		$RPM_BUILD_ROOT%{_sbindir}/zmailer
 ln -fs ../lib/zmailer/sendmail		$RPM_BUILD_ROOT%{_sbindir}/sendmail
 
 # Install manual pages
-make -C man S=../man MANDIR=$RPM_BUILD_ROOT%{_mandir} install
+%{__make} -C man S=../man MANDIR=$RPM_BUILD_ROOT%{_mandir} install
 
 # To avoid conflict with INN
 mv $RPM_BUILD_ROOT%{_mandir}/man8/sm.8 $RPM_BUILD_ROOT%{_mandir}/man8/sm-zmailer.8
