@@ -31,16 +31,17 @@ BuildRequires:	pam-devel
 %{!?_without_whoson:BuildRequires:	whoson-devel}
 %{!?_without_ldap:BuildRequires:	openldap-devel}
 URL:		http://www.zmailer.org/
-PreReq:		/sbin/chkconfig
-%{!?_without_whoson:Requires:	whoson >= 1.08}
+PreReq:		rc-scripts
 Requires(pre):	grep
 Requires(post):	grep
 Requires(post):	fileutils
 Requires(post):	net-tools
 Requires(post):	textutils
+Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires:	/etc/cron.d
 Requires:	logrotate >= 2.4
+%{!?_without_whoson:Requires:	whoson >= 1.08}
 Provides:	smtpdaemon
 Obsoletes:	smtpdaemon
 Obsoletes:	exim
@@ -118,14 +119,14 @@ statyczn± ZMailera.
 #	--prefix=%{_libdir}/zmailer \
 #	--with-zconfig=no
 
-%{__make} COPTS="%{rpmcflags} -w" all
+%{__make} all \
+	COPTS="%{rpmcflags} -w"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
 install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
 	$RPM_BUILD_ROOT%{_sysconfdir}/{cron.d,logrotate.d,rc.d/init.d} \
-	$RPM_BUILD_ROOT/{var/mail,usr/sbin} \
+	$RPM_BUILD_ROOT{/var/mail,/usr/sbin} \
 	$RPM_BUILD_ROOT/var/log/archiv/mail
 
 # Install main files
@@ -151,7 +152,9 @@ ln -fs ../lib/zmailer/zmailer		$RPM_BUILD_ROOT%{_sbindir}/zmailer
 ln -fs ../lib/zmailer/sendmail		$RPM_BUILD_ROOT%{_sbindir}/sendmail
 
 # Install manual pages
-%{__make} -C man S=../man MANDIR=$RPM_BUILD_ROOT%{_mandir} install
+%{__make} -C man install \
+	S=../man \
+	MANDIR=$RPM_BUILD_ROOT%{_mandir}
 
 # To avoid conflict with INN
 mv -f $RPM_BUILD_ROOT%{_mandir}/man8/sm.8 $RPM_BUILD_ROOT%{_mandir}/man8/sm-zmailer.8
