@@ -289,7 +289,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755,root,root) %dir /var/spool/postoffice/transport
 %attr(0755,root,root) %dir /var/spool/postoffice/transport/*
 %attr(0755,root,root) %dir /var/spool/postoffice/queue/*
-%attr(1777,root,root) %dir /var/mail
 
 %attr(750,root,root) %dir /var/log/mail
 %attr(750,root,root) %dir /var/log/archiv/mail
