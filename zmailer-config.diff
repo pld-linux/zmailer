@@ -148,7 +148,7 @@ diff -urN zmailer-2.99.50s18.orig/proto/smtpserver.conf.in zmailer-2.99.50s18/pr
  # where the brackets are special characters.
 diff -urN zmailer-2.99.50s18.orig/utils/zmailer.init.sh.in zmailer-2.99.50s18/utils/zmailer.init.sh.in
 --- zmailer-2.99.50s18.orig/utils/zmailer.init.sh.in	Fri May 21 10:44:41 1999
-+++ zmailer-2.99.50s18/utils/zmailer.init.sh.in	Fri May 21 10:59:05 1999
++++ zmailer-2.99.50s18/utils/zmailer.init.sh.in	Fri May 21 11:34:34 1999
 @@ -1,7 +1,25 @@
 -#! /bin/sh
 +#!/bin/sh
@@ -176,30 +176,21 @@ diff -urN zmailer-2.99.50s18.orig/utils/zmailer.init.sh.in zmailer-2.99.50s18/ut
  if [ -r $ZCONFIG ]; then
  	. $ZCONFIG
  else
-@@ -11,23 +29,40 @@
+@@ -11,23 +29,28 @@
  case "$1" in
  start)
  	if [ "${SMTPSERVER}" ]; then
 -		$MAILBIN/zmailer smtp
 +		show Starting ZMailer smtp daemon
-+		busy
-+		if $MAILBIN/zmailer smtp; then
-+		deltext; ok; else deltext; fail
-+		done
++		daemon $$MAILBIN/zmailer smtp
 +		
  	elif [ ${MAILSERVER-NONE} = NONE -a -x $MAILBIN/zmailer ]; then
 -		$MAILBIN/zmailer bootclean
 -		$MAILBIN/zmailer
 +		show Starting ZMailer bootcleaning
-+		busy
-+		if $MAILBIN/zmailer bootclean; then
-+		deltext; ok; else deltext; fail
-+		done
++		daemon $MAILBIN/zmailer bootclean
 +		show Starting Zmailer main daemon
-+		busy
-+		if $MAILBIN/zmailer; then
-+		deltext; ok; else deltext; fail
-+		done
++		daemon $MAILBIN/zmailer
  	fi
  	touch /var/lock/subsys/zmailer
  	;;
@@ -208,10 +199,7 @@ diff -urN zmailer-2.99.50s18.orig/utils/zmailer.init.sh.in zmailer-2.99.50s18/ut
  	if [ ${MAILSERVER-NONE} = NONE -a -x $MAILBIN/zmailer ]; then
 -		$MAILBIN/zmailer kill
 +		show Stopping ZMailer daemons
-+		busy
-+		if $MAILBIN/zmailer kill; then
-+		deltext; ok; else deltext; fail
-+		done
++		daemon $MAILBIN/zmailer kill
  	fi
  	rm -f /var/lock/subsys/zmailer
  	;;
