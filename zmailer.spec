@@ -6,8 +6,8 @@
 %bcond_without	spf	# build without SPF support
 #
 
-%define _snap 20040426
-%define _rel  0.3
+%define _snap 20040808
+%define _rel  0.2
 
 %if "%{_snap}" != "0"
 %define snapshot snap%{_snap}.rel
@@ -23,16 +23,15 @@ Release:	%{snapshot}%{_rel}
 License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
-Source0:	zmailer-%{_snap}.tar.bz2
-# Source0-md5:	368c147db86d534b6fdfcae21138ddc4
+Source0:	zmailer-%{_snap}.tar.gz
+# Source0-md5:	abe568c51d5b3daa53880391ec350d0d
 Source1:	%{name}-pl.txt
 Source2:	forms-pl-0.4.tar.gz
 # Source2-md5:	c4ca963cd941e3ac533860d7d3d9f4b1
 Source3:	%{name}.logrotate
 Patch0:		%{name}-config.diff
-Patch2:		%{name}-glibc.patch
-Patch4:		%{name}-spf.patch
-Patch5:		%{name}-spf-policy.diff
+Patch1:		%{name}-glibc.patch
+Patch2:		%{name}-mailman.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	ed
@@ -44,7 +43,7 @@ BuildRequires:	perl-devel
 %{?with_gdbm:BuildRequires:	gdbm-devel}
 %{?with_whoson:BuildRequires:	whoson-devel}
 %{?with_ldap:BuildRequires:	openldap-devel}
-%{?with_spf:BuildRequires: 	libspf_alt-devel}
+%{?with_spf:BuildRequires: 	libspf2-devel}
 URL:		http://www.zmailer.org/
 PreReq:		rc-scripts
 Requires(pre):	grep
@@ -111,9 +110,8 @@ statyczn± ZMailera.
 %prep
 %setup -q -a2 -n %{name}
 %patch0 -p1
-%patch2 -p1
-%patch4 -p1
-%patch5 -p0
+%patch1 -p1
+%patch2 -p1 
 
 %build
 cp -f /usr/share/automake/config.* .
@@ -213,7 +211,7 @@ cat << EOF > $RPM_BUILD_ROOT/etc/cron.d/zmailer
 # Cleanout public and postman directories
 7 4 * * *		root	! %{_libdir}/zmailer/zmailer cleanup >/dev/null
 # Check if services still work
-11 6,12,18,0 * * *	root	! %{_libdir}/zmailer/zmailcheck
+#11 6,12,18,0 * * *	root	! %{_libdir}/zmailer/zmailcheck
 EOF
 
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/logrotate.d/zmailer
