@@ -272,7 +272,7 @@ if [ "$1" = "0" ]; then
 fi
 
 %pre
-#%{_sbindir}/groupadd -f -g 47 zmailer
+#%%{_sbindir}/groupadd -f -g 47 zmailer
 
 if ! grep -q "^zmailer:" /etc/group; then
 	echo "zmailer::47:root,petidomo,uucp,daemon,news" >>/etc/group
