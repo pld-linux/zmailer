@@ -3,7 +3,7 @@ Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
 Version:	2.99.51
 Release:	1.0
-Copyright:	GPL
+License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
@@ -15,8 +15,8 @@ Patch0:		zmailer-config.diff
 Patch1:		zmailer-openssl.patch
 Patch2:		zmailer-libwrap.patch
 Prereq:		/sbin/chkconfig
-Prereq:         %{_sbindir}/groupadd
-Prereq:         %{_sbindir}/groupdel
+Prereq:		%{_sbindir}/groupadd
+Prereq:		%{_sbindir}/groupdel
 URL:		http://www.zmailer.org
 Requires:	logrotate >= 2.4
 Requires:	/etc/cron.d
@@ -33,7 +33,7 @@ Obsoletes:	smtpdaemon
 %description
 This is a package that implements an internet message transfer agent called
 ZMailer. It is intended for gateways or mail servers or other large site
-environments that have extreme demands on the abilities of the mailer.  It
+environments that have extreme demands on the abilities of the mailer. It
 was motivated by the problems of the Sendmail design in such situations.
 Zmailer is one of the mailers able to deal with huge quantities of mail and
 is more efficient any other mailer, qmail included. It supports IPv6,
@@ -41,28 +41,29 @@ WHOSON, SSL and TLS protocol.
 
 %description -l pl
 Ten pakiet zawiera implementacjê agenta transportu wiadomo¶ci internetowych
-o nazwie ZMailer. ZMailer przeznaczony jest dla bramek, serwerów poczty
-lub innych ¶rodowisk wymagaj±cych niezwyk³ych mo¿liwo¶ci od mailera.
-Motywacj± dla ZMailera by³y problemy z Sendmailem w trudnych sytuacjach.
-ZMailer jest jednym z tych mailerów, które potrafi± daæ sobie radê z ogromn±
-ilo¶ci± poczty. Ponadto ZMailer jest bardziej wydajny od innych mailerów
-w³±czaj±c w to qmaila. Kolejn± zalet± jest wsparcie dla protoko³u IPv6, WHOSON,
-SSL oraz TLS.
+o nazwie ZMailer. ZMailer przeznaczony jest dla bramek, serwerów poczty lub
+innych ¶rodowisk wymagaj±cych niezwyk³ych mo¿liwo¶ci od mailera. Motywacj±
+dla ZMailera by³y problemy z Sendmailem w trudnych sytuacjach. ZMailer jest
+jednym z tych mailerów, które potrafi± daæ sobie radê z ogromn± ilo¶ci±
+poczty. Ponadto ZMailer jest bardziej wydajny od innych mailerów w³±czaj±c
+w to qmaila. Kolejn± zalet± jest wsparcie dla protoko³u IPv6, WHOSON, SSL
+oraz TLS.
 
 %package devel
 Summary:	Static library and header file for zmailer
 Summary(pl):	Plik nag³ówkowy i biblioteka statyczna dla zmailera
 Group:		Development/Libraries
+Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name} = %{version}
 
 %description devel
-This is ZMailer's development package.
-It includes static library and header file.
+This is ZMailer's development package. It includes static library and
+header file.
 
 %description -l pl devel
-To jest pakiet dla developerów.
-Zawiera plik nag³ówkowy i bibliotekê statyczn± ZMailera.
+To jest pakiet dla developerów. Zawiera plik nag³ówkowy i bibliotekê
+statyczn± ZMailera.
 
 %prep
 %setup -q -n %{name}-%{version}
