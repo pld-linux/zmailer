@@ -27,7 +27,8 @@ BuildRequires:	ed
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.7c
 BuildRequires:	pam-devel
-BuildRequires: 	db-devel
+BuildRequires:	db-devel
+BuildRequires:	perl-devel
 %{?with_gdbm:BuildRequires:	gdbm-devel}
 %{?with_whoson:BuildRequires:	whoson-devel}
 %{?with_ldap:BuildRequires:	openldap-devel}
@@ -128,7 +129,7 @@ statyczn± ZMailera.
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
 	$RPM_BUILD_ROOT%{_sysconfdir}/{cron.d,logrotate.d,rc.d/init.d} \
-	$RPM_BUILD_ROOT{/var/mail,/usr/sbin} \
+	$RPM_BUILD_ROOT{/var/mail,%{_sbindir}} \
 	$RPM_BUILD_ROOT/var/log/archiv/mail
 
 # Install main files
@@ -296,15 +297,15 @@ fi
 %doc doc/manual/FAQ doc/design/zmog.ps zmailer-pl.txt doc/guides
 %doc utils/usenet/usenet.sh utils/mail2news utils/mailgateway
 %dir %{_sysconfdir}/mail
-%config %{_sysconfdir}/mail/cf
+%config(noreplace) %{_sysconfdir}/mail/cf
 %config %{_sysconfdir}/mail/forms
-%config %{_sysconfdir}/mail/fqlists
+%config(noreplace) %{_sysconfdir}/mail/fqlists
 
 %defattr(644,root,root,3755)
-%config %{_sysconfdir}/mail/db
+%config(noreplace) %{_sysconfdir}/mail/db
 
 %defattr(644,root,root,2755)
-%config %{_sysconfdir}/mail/lists
+%config(noreplace) %{_sysconfdir}/mail/lists
 
 %defattr(644,root,root,755)
 %attr(644,root,root) %config %{_sysconfdir}/mail/*.*

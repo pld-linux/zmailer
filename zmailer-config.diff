@@ -1,6 +1,6 @@
 diff -u -r zmailer-2.99.56.orig/contrib/zmailcheck zmailer-2.99.56/contrib/zmailcheck
---- zmailer-2.99.56.orig/contrib/zmailcheck	1998-02-10 21:01:44.000000000 +0000
-+++ zmailer-2.99.56/contrib/zmailcheck	2004-01-31 03:44:55.808191352 +0000
+--- zmailer-2.99.56.orig/contrib/zmailcheck	1998-02-10 22:01:44.000000000 +0100
++++ zmailer-2.99.56/contrib/zmailcheck	2004-01-31 23:51:49.000000000 +0100
 @@ -4,7 +4,7 @@
  
  set -e
@@ -11,8 +11,8 @@ diff -u -r zmailer-2.99.56.orig/contrib/zmailcheck zmailer-2.99.56/contrib/zmail
  status()
  {
 diff -u -r zmailer-2.99.56.orig/proto/cf/SMTP+UUCP.cf.in zmailer-2.99.56/proto/cf/SMTP+UUCP.cf.in
---- zmailer-2.99.56.orig/proto/cf/SMTP+UUCP.cf.in	2001-05-30 08:20:17.000000000 +0000
-+++ zmailer-2.99.56/proto/cf/SMTP+UUCP.cf.in	2004-01-31 03:44:55.809191200 +0000
+--- zmailer-2.99.56.orig/proto/cf/SMTP+UUCP.cf.in	2001-05-30 10:20:17.000000000 +0200
++++ zmailer-2.99.56/proto/cf/SMTP+UUCP.cf.in	2004-01-31 23:51:49.000000000 +0100
 @@ -7,7 +7,7 @@
  
  . $ZCONFIG
@@ -74,10 +74,9 @@ diff -u -r zmailer-2.99.56.orig/proto/cf/SMTP+UUCP.cf.in zmailer-2.99.56/proto/c
  [ "$orgdomains" = x ] && orgdomains=$orgdomain
  
  # set hostname to enable message-id generation and checking
-Only in zmailer-2.99.56/proto/cf: SMTP+UUCP.cf.in.orig
 diff -u -r zmailer-2.99.56.orig/proto/sm.conf.in zmailer-2.99.56/proto/sm.conf.in
---- zmailer-2.99.56.orig/proto/sm.conf.in	1998-07-28 16:00:18.000000000 +0000
-+++ zmailer-2.99.56/proto/sm.conf.in	2004-01-31 03:44:55.810191048 +0000
+--- zmailer-2.99.56.orig/proto/sm.conf.in	1998-07-28 18:00:18.000000000 +0200
++++ zmailer-2.99.56/proto/sm.conf.in	2004-01-31 23:51:49.000000000 +0100
 @@ -9,17 +9,17 @@
  #
  # bitnet stuff F=hu not set?
@@ -103,9 +102,9 @@ diff -u -r zmailer-2.99.56.orig/proto/sm.conf.in zmailer-2.99.56/proto/sm.conf.i
  #		# CYRUS example from: Tom Samplonius <tom@sdf.com>
  procm	sSPfn	@PROCMAIL@	procmail -a $h -d $u
  #		# Procmail example from: Ken Pizzini <ken@spry.com>
-diff -u -r zmailer-2.99.56.orig/proto/smtpserver.conf zmailer-2.99.56/proto/smtpserver.conf
---- zmailer-2.99.56.orig/proto/smtpserver.conf	2003-11-18 14:28:44.000000000 +0000
-+++ zmailer-2.99.56/proto/smtpserver.conf	2004-01-31 03:50:36.914335336 +0000
+diff -u -r zmailer-2.99.56.orig/proto/smtpserver.conf.in zmailer-2.99.56/proto/smtpserver.conf.in
+--- zmailer-2.99.56.orig/proto/smtpserver.conf.in	2003-08-29 11:55:06.000000000 +0200
++++ zmailer-2.99.56/proto/smtpserver.conf.in	2004-01-31 23:51:49.000000000 +0100
 @@ -93,7 +93,7 @@
  #  %T  =  curtime string
  #  %X  =  xlatelang parameter
@@ -151,24 +150,10 @@ diff -u -r zmailer-2.99.56.orig/proto/smtpserver.conf zmailer-2.99.56/proto/smtp
  # If the host presents itself as:  HELO [1.2.3.4], be lenient to it..
  # The syntax below is due to these patterns being SH-GLOB style patterns
  # where the brackets are special characters.
-diff -u -r zmailer-2.99.56.orig/proto/smtpserver.conf.in zmailer-2.99.56/proto/smtpserver.conf.in
---- zmailer-2.99.56.orig/proto/smtpserver.conf.in	2003-08-29 09:55:06.000000000 +0000
-+++ zmailer-2.99.56/proto/smtpserver.conf.in	2004-01-31 03:44:55.812190744 +0000
-@@ -93,7 +93,7 @@
- #  %T  =  curtime string
- #  %X  =  xlatelang parameter
- #
--#PARAM hdr220 %H ZMailer ESMTP-server %V running at Yoyodyne Propulsion Inc
-+PARAM hdr220 %H ZMailer ESMTP-server %V from Polish Linux Distribution
- #PARAM hdr220 %H ESMTP (NO UCE)(NO UBE) our local time is now %T
- #
- # Note above the "ESMTP" words are present because *some* MTA systems won't
-Only in zmailer-2.99.56/proto: smtpserver.conf.in.orig
-Only in zmailer-2.99.56/proto: smtpserver.conf.in.rej
-Only in zmailer-2.99.56/proto: smtpserver.conf~
-diff -u -r zmailer-2.99.56.orig/utils/zmailer.init.sh zmailer-2.99.56/utils/zmailer.init.sh
---- zmailer-2.99.56.orig/utils/zmailer.init.sh	2003-11-18 14:28:43.000000000 +0000
-+++ zmailer-2.99.56/utils/zmailer.init.sh	2004-01-31 04:01:07.759432304 +0000
+Tylko w zmailer-2.99.56.orig/utils: zmailer.init.sh
+diff -u -r zmailer-2.99.56.orig/utils/zmailer.init.sh.in zmailer-2.99.56/utils/zmailer.init.sh.in
+--- zmailer-2.99.56.orig/utils/zmailer.init.sh.in	2003-05-05 14:05:59.000000000 +0200
++++ zmailer-2.99.56/utils/zmailer.init.sh.in	2004-01-31 23:51:49.000000000 +0100
 @@ -1,7 +1,23 @@
 -#! /bin/sh
 +#!/bin/sh
@@ -195,7 +180,7 @@ diff -u -r zmailer-2.99.56.orig/utils/zmailer.init.sh zmailer-2.99.56/utils/zmai
 +[ "${NETWORKING}" == "no" ] && exit 0
  
  if [ -z "$ZCONFIG" ] ; then
-     ZCONFIG=/opt/mail/zmailer.conf
+     ZCONFIG=@ZMAILERCFGFILE@
 @@ -16,23 +32,48 @@
  case "$1" in
  start)
@@ -211,7 +196,7 @@ diff -u -r zmailer-2.99.56.orig/utils/zmailer.init.sh zmailer-2.99.56/utils/zmai
  	elif [ ${MAILSERVER-NONE} = NONE -a -x $MAILBIN/zmailer ]; then
 -		$MAILBIN/zmailer bootclean
 -		$MAILBIN/zmailer
-+		show Starting ZMailer bootcleaning; busy
++		show "Starting ZMailer bootcleaning"; busy
 +                if $MAILBIN/zmailer bootclean > /dev/null 2>&1 ; then
 +                        deltext; ok
 +                else
@@ -251,65 +236,3 @@ diff -u -r zmailer-2.99.56.orig/utils/zmailer.init.sh zmailer-2.99.56/utils/zmai
  	exit 0
  	;;
  esac
-diff -u -r zmailer-2.99.56.orig/utils/zmailer.init.sh.in zmailer-2.99.56/utils/zmailer.init.sh.in
---- zmailer-2.99.56.orig/utils/zmailer.init.sh.in	2003-05-05 12:05:59.000000000 +0000
-+++ zmailer-2.99.56/utils/zmailer.init.sh.in	2004-01-31 03:44:55.814190440 +0000
-@@ -16,23 +16,49 @@
- case "$1" in
- start)
- 	if [ "${SMTPSERVER}" ]; then
--		$MAILBIN/zmailer smtp
-+		show Starting ZMailer smtp daemon; busy
-+		if $$MAILBIN/zmailer smtp > /dev/null 2>&1 ; then
-+			deltext; ok
-+		else
-+			deltext; fail
-+		fi
-+		
- 	elif [ ${MAILSERVER-NONE} = NONE -a -x $MAILBIN/zmailer ]; then
--		$MAILBIN/zmailer bootclean
--		$MAILBIN/zmailer
-+		show Starting ZMailer bootcleaning; busy
-+                if $MAILBIN/zmailer bootclean > /dev/null 2>&1 ; then
-+                        deltext; ok
-+                else
-+                        deltext; fail
-+                fi
-+
-+		show Starting Zmailer main daemon; busy
-+                if $MAILBIN/zmailer > /dev/null 2>&1 ; then
-+                        deltext; ok
-+                else
-+                        deltext; fail
-+                fi
- 	fi
- 	touch /var/lock/subsys/zmailer
- 	;;
- 
- stop)
- 	if [ ${MAILSERVER-NONE} = NONE -a -x $MAILBIN/zmailer ]; then
--		$MAILBIN/zmailer kill
-+		show Stopping ZMailer daemons; busy
-+                if $MAILBIN/zmailer kill > /dev/null 2>&1 ; then
-+                        deltext; ok
-+                else
-+                        deltext; fail
-+                fi
-+
- 	fi
- 	rm -f /var/lock/subsys/zmailer
- 	;;
--
-+restart)
-+	$0 stop
-+	$0 start
-+	;;
- *)
--	echo "Usage: zmailer.init {start|stop}"
-+	echo "Usage: $0 {start|stop}"
- 	exit 0
- 	;;
- esac
-Only in zmailer-2.99.56/utils: zmailer.init.sh.in.orig
-Only in zmailer-2.99.56/utils: zmailer.init.sh.in.rej
-Only in zmailer-2.99.56/utils: zmailer.init.sh~
