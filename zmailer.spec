@@ -203,9 +203,6 @@ done
 
 cp -f %{SOURCE1} .
 
-gzip -9nf ChangeLog Overview README* TODO doc/guides/* doc/toplevel-domains \
-	doc/manual/FAQ doc/design/zmog.ps zmailer-pl.txt
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -288,7 +285,8 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz doc/*.gz doc/guides doc/manual/*.gz doc/design/*.gz
+%doc ChangeLog Overview README* TODO doc/toplevel-domains
+%doc doc/manual/FAQ doc/design/zmog.ps zmailer-pl.txt doc/guides
 %doc utils/usenet/usenet.sh utils/mail2news utils/mailgateway
 %dir %{_sysconfdir}/mail
 %config %{_sysconfdir}/mail/cf
