@@ -29,6 +29,7 @@ BuildRequires:	glibc-devel >= 2.1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Provides:	smtpdaemon
 Obsoletes:	smtpdaemon
+Obsoletes:	exim
 
 %description
 This is a package that implements an internet message transfer agent
