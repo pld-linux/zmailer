@@ -7,7 +7,7 @@
 #
 
 %define _snap 20040426
-%define _rel  0.1
+%define _rel  0.3
 
 %if "%{_snap}" != "0"
 %define snapshot snap%{_snap}.rel
@@ -32,6 +32,7 @@ Source3:	%{name}.logrotate
 Patch0:		%{name}-config.diff
 Patch2:		%{name}-glibc.patch
 Patch4:		%{name}-spf.patch
+Patch5:		%{name}-spf-policy.diff
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	ed
@@ -112,6 +113,7 @@ statyczn± ZMailera.
 %patch0 -p1
 %patch2 -p1
 %patch4 -p1
+%patch5 -p0
 
 %build
 cp -f /usr/share/automake/config.* .
