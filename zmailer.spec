@@ -91,7 +91,6 @@ statyczn± ZMailera.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-#%%#setup -q -a 2 -D -T -n %{name}-%{version}
 
 %build
 autoconf
@@ -195,10 +194,10 @@ install %{SOURCE3} $RPM_BUILD_ROOT/etc/logrotate.d/zmailer
 # postoffice tree (as created by proto/post-install.sh):
 install -d $RPM_BUILD_ROOT/var/spool/postoffice/{deferred,freezer,postman,public}
 for f1 in A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ; do
-    install -d $RPM_BUILD_ROOT/var/spool/postoffice/{TLSsrvrcache,TLSclntcache,router}/$f1
-    for f2 in A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ; do
-	install -d $RPM_BUILD_ROOT/var/spool/postoffice/{queue,transport}/$f1/$f2
-    done
+	install -d $RPM_BUILD_ROOT/var/spool/postoffice/{TLSsrvrcache,TLSclntcache,router}/$f1
+	for f2 in A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ; do
+		install -d $RPM_BUILD_ROOT/var/spool/postoffice/{queue,transport}/$f1/$f2
+	done
 done
 
 cp -f %{SOURCE1} .
@@ -288,6 +287,8 @@ fi
 
 %files
 %defattr(644,root,root,755)
+%doc *.gz doc/*.gz doc/guides doc/manual/*.gz doc/design/*.gz
+%doc utils/usenet/usenet.sh utils/mail2news utils/mailgateway
 %dir %{_sysconfdir}/mail
 %config %{_sysconfdir}/mail/cf
 %config %{_sysconfdir}/mail/forms
@@ -333,11 +334,6 @@ fi
 %attr(0700,root,root) %dir /var/spool/postoffice/TLSclntcache/*
 %attr(750,root,root) %dir /var/log/mail
 %attr(750,root,root) %dir /var/log/archiv/mail
-
-%doc *.gz doc/*.gz doc/guides doc/manual/*.gz doc/design/*.gz
-%doc utils/usenet/usenet.sh utils/mail2news utils/mailgateway
-# doesn't build...
-#%doc doc/manual/zmanual.ps
 
 %files devel
 %defattr(644,root,root,755)
