@@ -26,7 +26,7 @@ BuildRequires:	openssl-devel
 BuildRequires:	whoson-devel
 BuildRequires:	openldap-devel
 BuildRequires:	glibc-devel >= 2.1
-BuildRoot:	/tmp/%{name}-%{version}-root
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Provides:	smtpdaemon
 Obsoletes:	smtpdaemon
 
