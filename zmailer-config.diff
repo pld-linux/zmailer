@@ -13,15 +13,15 @@ diff -u -r zmailer.orig/contrib/zmailcheck zmailer/contrib/zmailcheck
 diff -u -r zmailer.orig/proto/cf/SMTP+UUCP.cf.in zmailer/proto/cf/SMTP+UUCP.cf.in
 --- zmailer.orig/proto/cf/SMTP+UUCP.cf.in	2001-05-30 10:22:36.000000000 +0200
 +++ zmailer/proto/cf/SMTP+UUCP.cf.in	2004-04-26 19:17:01.000000000 +0200
-@@ -7,7 +7,7 @@
+@@ -17,7 +17,7 @@
+ #| The MAILBIN/bin directory is the conventional location for auxiliary
+ #| programs.
  
- . $ZCONFIG
- 
--PATH=.:$MAILSHARE/cf:$MAILBIN/bin ; export PATH
+-PATH=$MAILSHARE/cf:$MAILBIN/bin ; export PATH
 +PATH=.:$MAILSHARE/cf:$MAILBIN/bin:/bin:/sbin:/usr/bin:/usr/sbin ; export PATH
- PS1=z$PS1
- #
- # Configure error logging (squirrel)
+ 
+ #| Lets interactive users know this is not exactly a /bin/sh.
+ 
 @@ -83,44 +83,16 @@
  . server.cf
  
