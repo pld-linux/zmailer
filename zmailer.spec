@@ -31,22 +31,23 @@ Provides:	smtpdaemon
 Obsoletes:	smtpdaemon
 
 %description
-This is a package that implements an internet message transfer agent called
-ZMailer. It is intended for gateways or mail servers or other large site
-environments that have extreme demands on the abilities of the mailer. It
-was motivated by the problems of the Sendmail design in such situations.
-Zmailer is one of the mailers able to deal with huge quantities of mail and
-is more efficient any other mailer, qmail included. It supports IPv6,
-WHOSON, SSL and TLS protocol.
+This is a package that implements an internet message transfer agent
+called ZMailer. It is intended for gateways or mail servers or other
+large site environments that have extreme demands on the abilities of
+the mailer. It was motivated by the problems of the Sendmail design in
+such situations. Zmailer is one of the mailers able to deal with huge
+quantities of mail and is more efficient any other mailer, qmail
+included. It supports IPv6, WHOSON, SSL and TLS protocol.
 
 %description -l pl
-Ten pakiet zawiera implementacjê agenta transportu wiadomo¶ci internetowych
-o nazwie ZMailer. ZMailer przeznaczony jest dla bramek, serwerów poczty lub
-innych ¶rodowisk wymagaj±cych niezwyk³ych mo¿liwo¶ci od mailera. Motywacj±
-dla ZMailera by³y problemy z Sendmailem w trudnych sytuacjach. ZMailer jest
-jednym z tych mailerów, które potrafi± daæ sobie radê z ogromn± ilo¶ci±
-poczty. Ponadto ZMailer jest bardziej wydajny od innych mailerów w³±czaj±c
-w to qmaila. Kolejn± zalet± jest wsparcie dla protoko³u IPv6, WHOSON, SSL
+Ten pakiet zawiera implementacjê agenta transportu wiadomo¶ci
+internetowych o nazwie ZMailer. ZMailer przeznaczony jest dla bramek,
+serwerów poczty lub innych ¶rodowisk wymagaj±cych niezwyk³ych
+mo¿liwo¶ci od mailera. Motywacj± dla ZMailera by³y problemy z
+Sendmailem w trudnych sytuacjach. ZMailer jest jednym z tych mailerów,
+które potrafi± daæ sobie radê z ogromn± ilo¶ci± poczty. Ponadto
+ZMailer jest bardziej wydajny od innych mailerów w³±czaj±c w to
+qmaila. Kolejn± zalet± jest wsparcie dla protoko³u IPv6, WHOSON, SSL
 oraz TLS.
 
 %package devel
@@ -74,7 +75,7 @@ statyczn± ZMailera.
 
 %build
 autoconf
-ZCONFIG=/etc/mail/zmailer.conf \
+ZCONFIG=%{_sysconfdir}/mail/zmailer.conf \
 ./configure %{_target_platform} \
 	--mandir=%{_mandir} \
 	--libdir=%{_libdir} \
@@ -83,10 +84,10 @@ ZCONFIG=/etc/mail/zmailer.conf \
 	--with-rmailpath=%{_bindir}/rmail \
 	--with-nntpserver=news \
 	--with-system-malloc \
-	--with-mailshare=/etc/mail \
+	--with-mailshare=%{_sysconfdir}/mail \
 	--with-zconfig=no \
 	--with-mailbin=%{_libdir}/zmailer \
-	--with-mailvar=/etc/mail \
+	--with-mailvar=%{_sysconfdir}/mail \
 	--with-ta-mmap \
 	--includedir=%{_includedir} \
 	--with-whoson \
@@ -99,21 +100,21 @@ make COPTS="$RPM_OPT_FLAGS -w" all
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8}
-install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d}
-install -d $RPM_BUILD_ROOT/{var/mail,usr/sbin}
+install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
+	$RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d} \
+	$RPM_BUILD_ROOT/{var/mail,usr/sbin}
 
 # Install main files
 make install \
 	prefix=$RPM_BUILD_ROOT \
-	MAILVAR=$RPM_BUILD_ROOT/etc/mail \
+	MAILVAR=$RPM_BUILD_ROOT%{_sysconfdir}/mail \
 	libdir=$RPM_BUILD_ROOT%{_libdir} \
 	includedir=$RPM_BUILD_ROOT%{_includedir}
 
 install	contrib/zmailcheck	$RPM_BUILD_ROOT%{_libdir}/zmailer/zmailcheck
 install	utils/zmailer.init.sh	$RPM_BUILD_ROOT/etc/rc.d/init.d/zmailer
 
-touch $RPM_BUILD_ROOT/etc/mail/mailname
+touch $RPM_BUILD_ROOT%{_sysconfdir}/mail/mailname
 
 # Few symlinks
 ln -fs zmailer/sendmail			$RPM_BUILD_ROOT%{_libdir}/sendmail
@@ -132,19 +133,19 @@ mv $RPM_BUILD_ROOT%{_mandir}/man8/sm.8 $RPM_BUILD_ROOT%{_mandir}/man8/sm-zmailer
 
 # Install Polish/English forms
 cd forms*
-cp -f forms/*   $RPM_BUILD_ROOT/etc/mail/forms/proto
-cp vacation.msg $RPM_BUILD_ROOT/etc/mail
+cp -f forms/* $RPM_BUILD_ROOT%{_sysconfdir}/mail/forms/proto
+cp vacation.msg $RPM_BUILD_ROOT%{_sysconfdir}/mail
 
 # Install proto files
-cd $RPM_BUILD_ROOT/etc/mail/proto
+cd $RPM_BUILD_ROOT%{_sysconfdir}/mail/proto
 for x in *; do cp $x ..; done
-cd $RPM_BUILD_ROOT/etc/mail/forms/proto
+cd $RPM_BUILD_ROOT%{_sysconfdir}/mail/forms/proto
 for x in *; do cp $x ..; done
-cd $RPM_BUILD_ROOT/etc/mail/db/proto
+cd $RPM_BUILD_ROOT%{_sysconfdir}/mail/db/proto
 for x in *; do cp $x ..; done
 
 # Aliases
-touch $RPM_BUILD_ROOT/etc/mail/aliases
+touch $RPM_BUILD_ROOT%{_sysconfdir}/mail/aliases
 
 # Remove unnecesary proto and bak files
 rm -r `find $RPM_BUILD_ROOT -name proto`
@@ -163,8 +164,8 @@ EOF
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/logrotate.d/zmailer
 
 # Router configuration
-cp -f $RPM_BUILD_ROOT/etc/mail/cf/SMTP+UUCP.cf \
-      $RPM_BUILD_ROOT/etc/mail/router.cf
+cp -f $RPM_BUILD_ROOT%{_sysconfdir}/mail/cf/SMTP+UUCP.cf \
+$RPM_BUILD_ROOT%{_sysconfdir}/mail/router.cf
 
 strip     $RPM_BUILD_ROOT%{_libdir}/zmailer/{*,ta}	2>/dev/null || :
 gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/*
@@ -247,21 +248,21 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%dir /etc/mail
-%config /etc/mail/cf
-%config /etc/mail/forms
-%config /etc/mail/fqlists
+%dir %{_sysconfdir}/mail
+%config %{_sysconfdir}/mail/cf
+%config %{_sysconfdir}/mail/forms
+%config %{_sysconfdir}/mail/fqlists
 
 %defattr(644,root,root,3755)
-%config /etc/mail/db
+%config %{_sysconfdir}/mail/db
 
 %defattr(644,root,root,2755)
-%config /etc/mail/lists
+%config %{_sysconfdir}/mail/lists
 
 %defattr(644,root,root,755)
-%attr(644,root,root) %config /etc/mail/*.*
-%attr(644,root,root) /etc/mail/mailname
-%attr(644,root,root) %config(noreplace) /etc/mail/aliases
+%attr(644,root,root) %config %{_sysconfdir}/mail/*.*
+%attr(644,root,root) %{_sysconfdir}/mail/mailname
+%attr(644,root,root) %config(noreplace) %{_sysconfdir}/mail/aliases
 
 %attr(640,root,root) /etc/logrotate.d/zmailer
 %attr(640,root,root) /etc/cron.d/zmailer
