@@ -1,13 +1,14 @@
+%define	oversion	2.99.51-pre1
 Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
-Version:	2.99.50s20cvs
+Version:	2.99.51_pre1
 Release:	1
 Copyright:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Daemons
 Group(pl):	Demony
-Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{oversion}.tar.gz
 Source1:	zmailer-pl.txt
 Source2:	forms-pl-0.4.tar.gz
 Patch0:		zmailer-config.diff
@@ -16,7 +17,7 @@ Prereq:		/sbin/chkconfig
 URL:		http://www.zmailer.org
 Requires:	logrotate >= 2.4
 Requires:	/etc/crontab.d
-Requires:	whoson >= 1.06
+Requires:	whoson >= 1.08
 Requires:	smtpdaemon
 BuildPrereq:	openssl-devel
 BuildPrereq:	whoson-devel
@@ -65,10 +66,10 @@ To jest pakiet dla developerów.
 Zawiera plik nag³ówkowy i bibliotekê statyczn± ZMailera.
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q -n %{name}-%{oversion}
 %patch0 -p1
 %patch1 -p1
-%setup -q -a 2 -D -T -n %{name}-%{version}
+%setup -q -a 2 -D -T -n %{name}-%{oversion}
 
 %build
 ZCONFIG=/etc/mail/zmailer.conf \
@@ -263,7 +264,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(640,root,root) /etc/logrotate.d/zmailer
 %attr(640,root,root) /etc/crontab.d/zmailer
 
-%attr(700,root,root) %config /etc/rc.d/init.d/zmailer
+%attr(700,root,root) /etc/rc.d/init.d/zmailer
 
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_sbindir}/*
@@ -300,6 +301,20 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/*
 
 %changelog
+* Mon Jul 05 1999 Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
+- new logging style
+
+$Log: zmailer.spec,v $
+Revision 1.3  1999-07-05 21:30:40  misiek
+auto zmailer.spec actualization
+
+Revision 1.12  1999/07/05 12:20:11  misiek
+*** empty log message ***
+
+Revision 1.11  1999/07/05 12:18:40  misiek
+update to 2.99.51-pre1
+
+
 * Thu May 20 1999 Arkadiusz Mi¶kiewicz <misiek@pld.org.pl>
   [2.99.50s18-1d]
 - new version
