@@ -13,6 +13,7 @@ License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
 Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
+# Source0-md5:	00dc1d3dc28205ba8c4f0fee8c4c7dce
 Source1:	%{name}-pl.txt
 Source2:	forms-pl-0.4.tar.gz
 Source3:	%{name}.logrotate
