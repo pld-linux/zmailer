@@ -2,6 +2,7 @@
 # Conditional build:
 # _without_whoson	- without WHOSON support
 # _without_ldap		- without LDAP support
+# _without_gdbm		- without GDBM support
 #
 Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
@@ -26,7 +27,7 @@ BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pam-devel
 BuildRequires:	db3-devel
-BuildRequires:	gdbm-devel
+%{!?_without_gdbm:BuildRequires:	gdbm-devel}
 %{!?_without_whoson:BuildRequires:	whoson-devel}
 %{!?_without_ldap:BuildRequires:	openldap-devel}
 URL:		http://www.zmailer.org/
@@ -104,7 +105,6 @@ autoconf
 	--with-nntpserver=news \
 	--with-system-malloc \
 	--with-mailshare=%{_sysconfdir}/mail \
-	--with-zconfig=no \
 	--with-mailbin=%{_libdir}/zmailer \
 	--with-mailvar=%{_sysconfdir}/mail \
 	--with-ta-mmap \
@@ -117,6 +117,7 @@ autoconf
 #	--with-yp \
 #	--with-yp-lib='-lyp'
 #	--prefix=%{_libdir}/zmailer \
+#	--with-zconfig=no 
 
 %{__make} COPTS="%{rpmcflags} -w" all
 
@@ -132,6 +133,7 @@ install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
 %{__make} install \
 	prefix=$RPM_BUILD_ROOT \
 	MAILVAR=$RPM_BUILD_ROOT%{_sysconfdir}/mail \
+	MAILSHARE=$RPM_BUILD_ROOT%{_sysconfdir}/mail \
 	libdir=$RPM_BUILD_ROOT%{_libdir} \
 	includedir=$RPM_BUILD_ROOT%{_includedir}
 
@@ -168,6 +170,10 @@ cd $RPM_BUILD_ROOT%{_sysconfdir}/mail/forms/proto
 for x in *; do cp -f $x ..; done
 cd $RPM_BUILD_ROOT%{_sysconfdir}/mail/db/proto
 for x in *; do cp -f $x ..; done
+cd $RPM_BUILD_ROOT%{_sysconfdir}/mail/cf/proto
+for x in *; do cp -f $x ..; done
+cd $RPM_BUILD_ROOT%{_sysconfdir}/mail
+cp -f ./cf/SMTP+UUCP.cf router.cf
 )
 
 # Aliases
@@ -213,6 +219,10 @@ umask 022
 if [ -x /bin/hostname ]; then
 hostname --fqdn >/etc/mail/mailname
 fi
+
+if [ -f /etc/mail/router.fc ]; then
+rm -f /etc/mail/router.fc
+fi 
 
 # Gymnastics to convice zmailer to use /etc/mail/aliases
 # or provide /etc/mail/aliases it if not found.
