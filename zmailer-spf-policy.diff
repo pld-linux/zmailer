@@ -1,0 +1,67 @@
+--- smtpserver/policytest.c.orig	2004-04-26 19:03:25.000000000 +0200
++++ smtpserver/policytest.c	2004-05-07 12:27:47.000000000 +0200
+@@ -1803,29 +1803,9 @@
+       return rc;
+     }
+ 
+-    if ((len > 0)  && (at[1] != '[') && state->values[P_A_SENDERokWithDNS]) {
+-      /* Accept if found in DNS, and not an address literal! */
+-      int test_c = state->values[P_A_SENDERokWithDNS][0];
+-      int rc = sender_dns_verify(test_c, at+1, len - (1 + at - str));
+-      if (debug)
+-	type(NULL,0,NULL," ... returns: %d", rc);
+-      PICK_PA_MSG(P_A_SENDERokWithDNS);
+-      return rc;
+-    }
+-
+-#ifdef HAVE_WHOSON_H
+-    if (valueeq(state->values[P_A_TrustWhosOn], "+")) {
+-      if (debug)
+-	type(NULL,0,NULL," policytestaddr: 'trust-whoson +' found, accept? = %d",
+-	     (state->whoson_result == 0));
+-      if (state->whoson_result == 0)
+-	return 0; /* OK! */
+-    }
+-#endif
+-
+-    rc=0;
+ #ifdef HAVE_SPF_ALT_SPF_H
+     if (state->check_spf) {
++      int rc=0;
+       int spf_level;
+       SPF_output_t spf_output = SPF_result(state->spfcid,state->spfdcid);
+       if (debug) {
+@@ -1867,11 +1847,32 @@
+ 	  PICK_PA_MSG(P_A_CheckSPF);
+ 	}
+ 	rc=-1;
++	return rc;
+       }
+       SPF_free_output(&spf_output);
+     }
+ #endif
+-    return rc;
++
++    if ((len > 0)  && (at[1] != '[') && state->values[P_A_SENDERokWithDNS]) {
++      /* Accept if found in DNS, and not an address literal! */
++      int test_c = state->values[P_A_SENDERokWithDNS][0];
++      int rc = sender_dns_verify(test_c, at+1, len - (1 + at - str));
++      if (debug)
++	type(NULL,0,NULL," ... returns: %d", rc);
++      PICK_PA_MSG(P_A_SENDERokWithDNS);
++      return rc;
++    }
++
++#ifdef HAVE_WHOSON_H
++    if (valueeq(state->values[P_A_TrustWhosOn], "+")) {
++      if (debug)
++	type(NULL,0,NULL," policytestaddr: 'trust-whoson +' found, accept? = %d",
++	     (state->whoson_result == 0));
++      if (state->whoson_result == 0)
++	return 0; /* OK! */
++    }
++#endif
++    return 0;
+ }
+ 
+ static int pt_rcptto(rel, state, str, len)
