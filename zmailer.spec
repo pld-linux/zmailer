@@ -4,10 +4,11 @@
 %bcond_without	ldap	# build without LDAP support
 %bcond_without	gdbm	# build without GDBM support
 %bcond_without	spf	# build without SPF support
+%bcond_without	sasl2	# build without SASL2 support
 #
 
-%define _snap 20040808
-%define _rel  0.2
+%define _snap 20040915
+%define _rel  0.1
 
 %if "%{_snap}" != "0"
 %define snapshot snap%{_snap}.rel
@@ -23,7 +24,7 @@ Release:	%{snapshot}%{_rel}
 License:	GPL
 Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
-Source0:	zmailer-%{_snap}.tar.gz
+Source0:	zmailer-%{_snap}.tar.bz2
 # Source0-md5:	abe568c51d5b3daa53880391ec350d0d
 Source1:	%{name}-pl.txt
 Source2:	forms-pl-0.4.tar.gz
@@ -44,6 +45,7 @@ BuildRequires:	perl-devel
 %{?with_whoson:BuildRequires:	whoson-devel}
 %{?with_ldap:BuildRequires:	openldap-devel}
 %{?with_spf:BuildRequires: 	libspf2-devel}
+%{?with_sasl2:BuildRequires: 	cyrus-sasl-devel > 2.0}
 URL:		http://www.zmailer.org/
 PreReq:		rc-scripts
 Requires(pre):	grep
@@ -120,6 +122,7 @@ cp -f /usr/share/automake/config.* .
 	--with-zconfig=%{_sysconfdir}/mail/zmailer.conf \
 	--with-postoffice=/var/spool/postoffice \
 	--with-rmailpath=%{_bindir}/rmail \
+	--with-zconfig-noload \
 	--with-nntpserver=news \
 	--with-system-malloc \
 	--with-mailshare=%{_sysconfdir}/mail \
@@ -129,6 +132,7 @@ cp -f /usr/share/automake/config.* .
 	%{?with_whoson:--with-whoson} \
 	%{?with_ldap:--with-ldap-prefix} \
 	%{?with_spf:--with-spf} \
+	%{?with_sasl2:--with-sasl2} \
 	--with-openssl-prexix=%{_prefix} \
 	--with-tcp-wrappers \
 	--with-ipv6 \
