@@ -37,16 +37,16 @@ BuildRequires:	perl-devel
 BuildRequires:	rpmbuild(macros) >= 1.159
 %{?with_whoson:BuildRequires:	whoson-devel}
 URL:		http://www.zmailer.org/
-PreReq:		rc-scripts
-Requires(pre):	grep
-Requires(post):	grep
 Requires(post):	fileutils
+Requires(post):	grep
 Requires(post):	net-tools
 Requires(post):	textutils
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
+Requires(pre):	grep
 Requires:	/etc/cron.d
 Requires:	logrotate >= 2.4
+Requires:	rc-scripts
 %{?with_whoson:Requires:	whoson >= 1.08}
 Provides:	group(zmailer)
 Provides:	smtpdaemon
@@ -340,7 +340,7 @@ fi
 %attr(644,root,root) %{_sysconfdir}/mail/mailname
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/mail/aliases
 
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/zmailer
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/zmailer
 %attr(640,root,root) /etc/cron.d/zmailer
 
 %attr(754,root,root) /etc/rc.d/init.d/zmailer
@@ -351,22 +351,22 @@ fi
 %attr(755,root,root) %{_libdir}/zmailer
 
 %{_mandir}/man[158]/*
-%attr(0755,root,root) %dir /var/spool/postoffice
-%attr(0750,root,root) %dir /var/spool/postoffice/deferred
-%attr(0750,root,root) %dir /var/spool/postoffice/freezer
-%attr(0750,root,root) %dir /var/spool/postoffice/postman
-%attr(0750,root,root) %dir /var/spool/postoffice/queue
+%attr(755,root,root) %dir /var/spool/postoffice
+%attr(750,root,root) %dir /var/spool/postoffice/deferred
+%attr(750,root,root) %dir /var/spool/postoffice/freezer
+%attr(750,root,root) %dir /var/spool/postoffice/postman
+%attr(750,root,root) %dir /var/spool/postoffice/queue
 %attr(1777,root,root) %dir /var/spool/postoffice/public
 %attr(1777,root,root) %dir /var/spool/postoffice/router
-%attr(0755,root,root) %dir /var/spool/postoffice/transport
-%attr(0755,root,root) %dir /var/spool/postoffice/transport/*
-%attr(0755,root,root) %dir /var/spool/postoffice/transport/*/*
-%attr(0755,root,root) %dir /var/spool/postoffice/queue/*
-%attr(0755,root,root) %dir /var/spool/postoffice/queue/*/*
-%attr(0700,root,root) %dir /var/spool/postoffice/TLSsrvrcache
-%attr(0700,root,root) %dir /var/spool/postoffice/TLSsrvrcache/*
-%attr(0700,root,root) %dir /var/spool/postoffice/TLSclntcache
-%attr(0700,root,root) %dir /var/spool/postoffice/TLSclntcache/*
+%attr(755,root,root) %dir /var/spool/postoffice/transport
+%attr(755,root,root) %dir /var/spool/postoffice/transport/*
+%attr(755,root,root) %dir /var/spool/postoffice/transport/*/*
+%attr(755,root,root) %dir /var/spool/postoffice/queue/*
+%attr(755,root,root) %dir /var/spool/postoffice/queue/*/*
+%attr(700,root,root) %dir /var/spool/postoffice/TLSsrvrcache
+%attr(700,root,root) %dir /var/spool/postoffice/TLSsrvrcache/*
+%attr(700,root,root) %dir /var/spool/postoffice/TLSclntcache
+%attr(700,root,root) %dir /var/spool/postoffice/TLSclntcache/*
 %attr(750,root,root) %dir /var/log/mail
 %attr(750,root,root) %dir /var/log/archiv/mail
 
