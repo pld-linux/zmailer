@@ -1,5 +1,5 @@
 #
-# TODO: fix group creation
+# TODO: fix petidomo user reference
 #
 # Conditional build:
 %bcond_without	whoson	# build without WHOSON support
@@ -289,6 +289,7 @@ fi
 
 %pre
 %groupadd -g 47 zmailer
+# FIXME: petidomo user undefined (anywhere) so may be not existent
 for u in root petidomo uucp daemon news; do
 	GROUPS=`/bin/id -n -G $u | sed 's/ /,/g'`
 	if [ -z `echo $GROUPS | grep '\(^\|,\)zmailer\($\|,\)'; then
