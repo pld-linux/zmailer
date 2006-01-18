@@ -285,34 +285,16 @@ rm -f /var/spool/postoffice/.pid.*
 
 if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del zmailer
-	rm -f /var/log/mail/*
 fi
 
 %pre
-if ! grep -q "^zmailer:" /etc/group; then
-	echo "zmailer::47:root,petidomo,uucp,daemon,news" >>/etc/group
-fi
-#if [ -n "`/usr/bin/getgid zmailer`" ]; then
-#	if [ "`/usr/bin/getgid zmailer`" != "47" ]; then
-#		echo "Error: group zmailer doesn't have gid=47. Correct this before installing zmailer." 1>&2
-#		exit 1
-#	else
-#		for u in root petidomo uucp daemon news; do
-#			GROUPS=/bin/id -n -G $u | sed 's/ /,/g'
-#			if [ -z `echo $GROUPS | grep '\(^\|,\)zmailer\($\|,\)'; then
-#				usermod -G "${GROUPS},zmailer" $u 1>&2 ||:
-#			fi
-#		done
-#	fi
-#else
-#	echo "Adding group zmailer GID=47."
-#	if /usr/sbin/groupadd -g 47 zmailer 1>&2; then
-#		for u in root petidomo uucp daemon news; do
-#			GROUPS=`/bin/id -n -G $u | sed 's/ /,/g'`
-#			usermod -G "${GROUPS},zmailer" $u 1>&2 ||:
-#		done
-#	fi
-#fi
+%groupadd -g 47 zmailer
+for u in root petidomo uucp daemon news; do
+	GROUPS=/bin/id -n -G $u | sed 's/ /,/g'
+	if [ -z `echo $GROUPS | grep '\(^\|,\)zmailer\($\|,\)'; then
+		/usr/sbin/usermod -G "${GROUPS},zmailer" $u 1>&2 ||:
+	fi
+done
 
 %postun
 if [ "$1" = "0" ]; then
