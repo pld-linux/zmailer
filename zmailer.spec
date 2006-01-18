@@ -290,7 +290,7 @@ fi
 %pre
 %groupadd -g 47 zmailer
 for u in root petidomo uucp daemon news; do
-	GROUPS=/bin/id -n -G $u | sed 's/ /,/g'
+	GROUPS=`/bin/id -n -G $u | sed 's/ /,/g'`
 	if [ -z `echo $GROUPS | grep '\(^\|,\)zmailer\($\|,\)'; then
 		/usr/sbin/usermod -G "${GROUPS},zmailer" $u 1>&2 ||:
 	fi
