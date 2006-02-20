@@ -1,6 +1,3 @@
-#
-# TODO: fix petidomo user reference
-#
 # Conditional build:
 %bcond_without	whoson	# build without WHOSON support
 %bcond_without	ldap	# build without LDAP support
@@ -10,9 +7,8 @@ Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
 Name:		zmailer
 Version:	2.99.56
-Release:	5
+Release:	6
 License:	GPL
-Vendor:		Matti Aarnio <mea@nic.funet.fi>
 Group:		Networking/Daemons
 Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
 # Source0-md5:	c94cc0c2e2427a210a046a02ac4c2d50
@@ -24,6 +20,7 @@ Patch0:		%{name}-config.diff
 Patch1:		%{name}-ldap-lmap.patch
 Patch2:		%{name}-glibc.patch
 Patch3:		%{name}-sleepycatdb.patch
+URL:		http://www.zmailer.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	db-devel
@@ -36,7 +33,6 @@ BuildRequires:	pam-devel
 BuildRequires:	perl-devel
 BuildRequires:	rpmbuild(macros) >= 1.159
 %{?with_whoson:BuildRequires:	whoson-devel}
-URL:		http://www.zmailer.org/
 Requires(post):	fileutils
 Requires(post):	grep
 Requires(post):	net-tools
@@ -131,7 +127,7 @@ cp -f /usr/share/automake/config.* .
 #	--prefix=%{_libdir}/zmailer \
 #	--with-zconfig=no
 
-%{__make} all \
+%{__make} -j1 all \
 	COPTS="%{rpmcflags} -w"
 
 %install
@@ -277,23 +273,24 @@ done | tr -d '\n' | tr -s '|' '\n' | sort >> /etc/mail/db/localnames
 %{_libdir}/zmailer/policy-builder.sh -n
 
 %preun
-if [ -e /var/lock/subsys/zmailer ]; then
-	/etc/rc.d/init.d/zmailer stop || :
-fi
-
-rm -f /var/spool/postoffice/.pid.*
-
 if [ "$1" = "0" ]; then
+	if [ -e /var/lock/subsys/zmailer ]; then
+		/etc/rc.d/init.d/zmailer stop || :
+	fi
+
+	rm -f /var/spool/postoffice/.pid.*
 	/sbin/chkconfig --del zmailer
 fi
 
 %pre
 %groupadd -g 47 zmailer
-# FIXME: petidomo user undefined (anywhere) so may be not existent
 for u in root petidomo uucp daemon news; do
+	if [ -z "`/bin/id -u $u 2>/dev/null`" ]; then
+		continue
+	fi
 	GROUPS=`/bin/id -n -G $u | sed 's/ /,/g'`
-	if [ -z `echo $GROUPS | grep '\(^\|,\)zmailer\($\|,\)'; then
-		/usr/sbin/usermod -G "${GROUPS},zmailer" $u 1>&2 ||:
+	if [ -z "`echo $GROUPS | grep '\(^\|,\)zmailer\($\|,\)'`" ]; then
+		/usr/sbin/usermod -G "${GROUPS},zmailer" $u 1>&2 || :
 	fi
 done
 
