@@ -1,3 +1,5 @@
+# TODO
+# - missing service restart
 # Conditional build:
 %bcond_without	whoson	# build without WHOSON support
 %bcond_without	ldap	# build without LDAP support
@@ -31,7 +33,7 @@ BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pam-devel
 BuildRequires:	perl-devel
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.268
 %{?with_whoson:BuildRequires:	whoson-devel}
 Requires(post):	fileutils
 Requires(post):	grep
@@ -223,8 +225,8 @@ rm -rf $RPM_BUILD_ROOT
 umask 022
 /sbin/chkconfig --add zmailer
 
-if [ -x /bin/hostname ]; then
-	hostname --fqdn >/etc/mail/mailname
+if [ "$1" = 1 -a -x /bin/hostname ]; then
+	hostname --fqdn > /etc/mail/mailname
 fi
 
 if [ -f /etc/mail/router.fc ]; then
@@ -274,12 +276,9 @@ done | tr -d '\n' | tr -s '|' '\n' | sort >> /etc/mail/db/localnames
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -e /var/lock/subsys/zmailer ]; then
-		/etc/rc.d/init.d/zmailer stop || :
-	fi
-
-	rm -f /var/spool/postoffice/.pid.*
+	%service zmailer stop
 	/sbin/chkconfig --del zmailer
+	rm -f /var/spool/postoffice/.pid.*
 fi
 
 %pre
