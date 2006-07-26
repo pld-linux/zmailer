@@ -315,9 +315,9 @@ fi
 %config(noreplace) %{_sysconfdir}/mail/lists
 
 %defattr(644,root,root,755)
-%attr(644,root,root) %config %{_sysconfdir}/mail/*.*
-%attr(644,root,root) %{_sysconfdir}/mail/mailname
-%attr(644,root,root) %config(noreplace) %{_sysconfdir}/mail/aliases
+%config %{_sysconfdir}/mail/*.*
+%{_sysconfdir}/mail/mailname
+%config(noreplace) %{_sysconfdir}/mail/aliases
 
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/zmailer
 %attr(640,root,root) /etc/cron.d/zmailer
