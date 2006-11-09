@@ -88,7 +88,7 @@ oraz TLS.
 Summary:	Static library and header file for zmailer
 Summary(pl):	Plik nag³ówkowy i biblioteka statyczna dla zmailera
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description devel
 This is ZMailer's development package. It includes static library and
