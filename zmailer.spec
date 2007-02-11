@@ -1,5 +1,6 @@
 # TODO
 # - missing service restart
+# - check locale settings in %post
 # Conditional build:
 %bcond_without	whoson	# build without WHOSON support
 %bcond_without	ldap	# build without LDAP support
@@ -238,7 +239,9 @@ fi
 if [ ! -L /etc/mail/db/aliases ]; then
 	if [ -f /etc/mail/aliases ]; then
 		echo "Generating Symlink to use /etc/mail/aliases for aliasing"
-		rm -f /etc/mail/db/aliases || echo "Strange nothing at (Dziwnie puste) /etc/mail/db/aliases. Don't worry (Nie martw siê)."
+		rm -f /etc/mail/db/aliases || echo "Strange nothing at /etc/mail/db/aliases. Don't worry."
+# FIXME! check locale here
+#		echo "Dziwnie puste /etc/mail/db/aliases. Nie martw sie."
 	else
 		echo "Installing new /etc/mail/aliases from zmailer sample"
 		mv -f /etc/mail/db/aliases /etc/aliases
