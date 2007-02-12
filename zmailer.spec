@@ -7,7 +7,7 @@
 %bcond_without	gdbm	# build without GDBM support
 #
 Summary:	Secure Mailer for Extreme Performance Demands
-Summary(pl.UTF-8):   Bezpieczny MTA dla Wymagających Ekstremalnej Wydajności
+Summary(pl.UTF-8):	Bezpieczny MTA dla Wymagających Ekstremalnej Wydajności
 Name:		zmailer
 Version:	2.99.56
 Release:	7
@@ -87,7 +87,7 @@ oraz TLS.
 
 %package devel
 Summary:	Static library and header file for zmailer
-Summary(pl.UTF-8):   Plik nagłówkowy i biblioteka statyczna dla zmailera
+Summary(pl.UTF-8):	Plik nagłówkowy i biblioteka statyczna dla zmailera
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
