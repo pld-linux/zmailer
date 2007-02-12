@@ -17,7 +17,7 @@
 %endif
 
 Summary:	Secure Mailer for Extreme Performance Demands
-Summary(pl):	Bezpieczny MTA dla Wymagaj±cych Ekstremalnej Wydajno¶ci
+Summary(pl.UTF-8):   Bezpieczny MTA dla WymagajÄ…cych Ekstremalnej WydajnoÅ›ci
 Name:		zmailer
 Version:	2.99.57
 Release:	%{snapshot}%{_rel}
@@ -84,20 +84,20 @@ such situations. Zmailer is one of the mailers able to deal with huge
 quantities of mail and is more efficient any other mailer, qmail
 included. It supports IPv6, WHOSON, SSL and TLS protocol.
 
-%description -l pl
-Ten pakiet zawiera implementacjê agenta transportu wiadomo¶ci
+%description -l pl.UTF-8
+Ten pakiet zawiera implementacjÄ™ agenta transportu wiadomoÅ›ci
 internetowych o nazwie ZMailer. ZMailer przeznaczony jest dla bramek,
-serwerów poczty lub innych ¶rodowisk wymagaj±cych niezwyk³ych
-mo¿liwo¶ci od mailera. Motywacj± dla ZMailera by³y problemy z
-Sendmailem w trudnych sytuacjach. ZMailer jest jednym z tych mailerów,
-które potrafi± daæ sobie radê z ogromn± ilo¶ci± poczty. Ponadto
-ZMailer jest bardziej wydajny od innych mailerów w³±czaj±c w to
-qmaila. Kolejn± zalet± jest wsparcie dla protoko³u IPv6, WHOSON, SSL
+serwerÃ³w poczty lub innych Å›rodowisk wymagajÄ…cych niezwykÅ‚ych
+moÅ¼liwoÅ›ci od mailera. MotywacjÄ… dla ZMailera byÅ‚y problemy z
+Sendmailem w trudnych sytuacjach. ZMailer jest jednym z tych mailerÃ³w,
+ktÃ³re potrafiÄ… daÄ‡ sobie radÄ™ z ogromnÄ… iloÅ›ciÄ… poczty. Ponadto
+ZMailer jest bardziej wydajny od innych mailerÃ³w wÅ‚Ä…czajÄ…c w to
+qmaila. KolejnÄ… zaletÄ… jest wsparcie dla protokoÅ‚u IPv6, WHOSON, SSL
 oraz TLS.
 
 %package devel
 Summary:	Static library and header file for zmailer
-Summary(pl):	Plik nag³ówkowy i biblioteka statyczna dla zmailera
+Summary(pl.UTF-8):   Plik nagÅ‚Ã³wkowy i biblioteka statyczna dla zmailera
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
 
@@ -105,9 +105,9 @@ Requires:	%{name} = %{version}
 This is ZMailer's development package. It includes static library and
 header file.
 
-%description devel -l pl
-To jest pakiet dla developerów. Zawiera plik nag³ówkowy i bibliotekê
-statyczn± ZMailera.
+%description devel -l pl.UTF-8
+To jest pakiet dla developerÃ³w. Zawiera plik nagÅ‚Ã³wkowy i bibliotekÄ™
+statycznÄ… ZMailera.
 
 %prep
 %setup -q -a2 -n %{name}
@@ -250,7 +250,9 @@ fi
 if [ ! -L /etc/mail/db/aliases ]; then
 	if [ -f /etc/mail/aliases ]; then
 		echo "Generating Symlink to use /etc/mail/aliases for aliasing"
-		rm -f /etc/mail/db/aliases || echo "Strange nothing at (Dziwnie puste) /etc/mail/db/aliases. Don't worry (Nie martw siê)."
+		rm -f /etc/mail/db/aliases || echo "Strange nothing at /etc/mail/db/aliases. Don't worry."
+# FIXME! check locale here
+#		echo "Dziwnie puste /etc/mail/db/aliases. Nie martw sie."
 	else
 		echo "Installing new /etc/mail/aliases from zmailer sample"
 		mv -f /etc/mail/db/aliases /etc/aliases
