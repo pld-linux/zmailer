@@ -138,7 +138,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
 	$RPM_BUILD_ROOT%{_sysconfdir}/{cron.d,logrotate.d,rc.d/init.d} \
 	$RPM_BUILD_ROOT{/var/mail,%{_sbindir}} \
-	$RPM_BUILD_ROOT/var/log/archiv/mail
+	$RPM_BUILD_ROOT/var/log/archive/mail
 
 # Install main files
 %{__make} install \
@@ -350,7 +350,7 @@ fi
 %attr(700,root,root) %dir /var/spool/postoffice/TLSclntcache
 %attr(700,root,root) %dir /var/spool/postoffice/TLSclntcache/*
 %attr(750,root,root) %dir /var/log/mail
-%attr(750,root,root) %dir /var/log/archiv/mail
+%attr(750,root,root) %dir /var/log/archive/mail
 
 %files devel
 %defattr(644,root,root,755)
