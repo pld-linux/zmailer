@@ -10,7 +10,7 @@ Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl.UTF-8):	Bezpieczny MTA dla Wymagających Ekstremalnej Wydajności
 Name:		zmailer
 Version:	2.99.56
-Release:	7
+Release:	9
 License:	GPL
 Group:		Networking/Daemons
 Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
@@ -49,19 +49,7 @@ Requires:	rc-scripts
 %{?with_whoson:Requires:	whoson >= 1.08}
 Provides:	group(zmailer)
 Provides:	smtpdaemon
-Obsoletes:	courier
-Obsoletes:	exim
-Obsoletes:	masqmail
-Obsoletes:	nullmailer
-Obsoletes:	omta
-Obsoletes:	postfix
-Obsoletes:	qmail
-Obsoletes:	sendmail
-Obsoletes:	sendmail-cf
-Obsoletes:	sendmail-doc
-Obsoletes:	smail
 Obsoletes:	smtpdaemon
-Obsoletes:	ssmtp
 Conflicts:	vacation
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
