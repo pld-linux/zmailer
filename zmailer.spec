@@ -50,6 +50,7 @@ Requires:	rc-scripts
 Provides:	group(zmailer)
 Provides:	smtpdaemon
 Obsoletes:	smtpdaemon
+Conflicts:	logrotate < 3.7.4
 Conflicts:	vacation
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
