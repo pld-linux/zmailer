@@ -30,7 +30,7 @@ BuildRequires:	db-devel
 BuildRequires:	ed
 %{?with_gdbm:BuildRequires:	gdbm-devel}
 BuildRequires:	libwrap-devel
-%{?with_ldap:BuildRequires:	openldap-devel >= 2.3}
+%{?with_ldap:BuildRequires:	openldap-devel >= 2.4.6}
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pam-devel
 BuildRequires:	perl-devel
