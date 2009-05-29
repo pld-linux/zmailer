@@ -1,6 +1,6 @@
-diff -u -r zmailer-2.99.56.orig/contrib/zmailcheck zmailer-2.99.56/contrib/zmailcheck
---- zmailer-2.99.56.orig/contrib/zmailcheck	1998-02-10 22:01:44.000000000 +0100
-+++ zmailer-2.99.56/contrib/zmailcheck	2004-01-31 23:51:49.000000000 +0100
+diff -urN zmailer-2.99.57.orig/contrib/zmailcheck zmailer-2.99.57/contrib/zmailcheck
+--- zmailer-2.99.57.orig/contrib/zmailcheck	2007-06-29 01:06:05.000000000 +0200
++++ zmailer-2.99.57/contrib/zmailcheck	2009-05-29 18:34:46.131804677 +0200
 @@ -4,7 +4,7 @@
  
  set -e
@@ -10,20 +10,20 @@ diff -u -r zmailer-2.99.56.orig/contrib/zmailcheck zmailer-2.99.56/contrib/zmail
  
  status()
  {
-diff -u -r zmailer-2.99.56.orig/proto/cf/SMTP+UUCP.cf.in zmailer-2.99.56/proto/cf/SMTP+UUCP.cf.in
---- zmailer-2.99.56.orig/proto/cf/SMTP+UUCP.cf.in	2001-05-30 10:20:17.000000000 +0200
-+++ zmailer-2.99.56/proto/cf/SMTP+UUCP.cf.in	2004-01-31 23:51:49.000000000 +0100
-@@ -7,7 +7,7 @@
+diff -urN zmailer-2.99.57.orig/proto/cf/SMTP+UUCP.cf.in zmailer-2.99.57/proto/cf/SMTP+UUCP.cf.in
+--- zmailer-2.99.57.orig/proto/cf/SMTP+UUCP.cf.in	2007-06-29 01:06:07.000000000 +0200
++++ zmailer-2.99.57/proto/cf/SMTP+UUCP.cf.in	2009-05-29 18:38:24.448654001 +0200
+@@ -17,7 +17,7 @@
+ #| The MAILBIN/bin directory is the conventional location for auxiliary
+ #| programs.
  
- . $ZCONFIG
- 
--PATH=.:$MAILSHARE/cf:$MAILBIN/bin ; export PATH
+-PATH=$MAILSHARE/cf:$MAILBIN/bin ; export PATH
 +PATH=.:$MAILSHARE/cf:$MAILBIN/bin:/bin:/sbin:/usr/bin:/usr/sbin ; export PATH
- PS1=z$PS1
- #
- # Configure error logging (squirrel)
-@@ -83,44 +83,16 @@
- . server.cf
+ 
+ #| Lets interactive users know this is not exactly a /bin/sh.
+ 
+@@ -165,44 +165,16 @@
+ #| We prefer having   $MAILVAR/mail.conf   !
  
  mailconf () {
 -	local hname
@@ -50,9 +50,9 @@ diff -u -r zmailer-2.99.56.orig/proto/cf/SMTP+UUCP.cf.in zmailer-2.99.56/proto/c
 -
 -	# This is what it will say on out mail
 -	mydomain=$hostname
-+	orgdomain=$(/bin/hostname --domain)
-+	hostname=$(/bin/hostname --fqdn)
-+	read mydomain </etc/mail/mailname
++    orgdomain=$(/bin/hostname --domain)
++    hostname=$(/bin/hostname --fqdn)
++    read mydomain </etc/mail/mailname
  }
  
  orgdomains=x
@@ -74,9 +74,9 @@ diff -u -r zmailer-2.99.56.orig/proto/cf/SMTP+UUCP.cf.in zmailer-2.99.56/proto/c
  [ "$orgdomains" = x ] && orgdomains=$orgdomain
  
  # set hostname to enable message-id generation and checking
-diff -u -r zmailer-2.99.56.orig/proto/sm.conf.in zmailer-2.99.56/proto/sm.conf.in
---- zmailer-2.99.56.orig/proto/sm.conf.in	1998-07-28 18:00:18.000000000 +0200
-+++ zmailer-2.99.56/proto/sm.conf.in	2004-01-31 23:51:49.000000000 +0100
+diff -urN zmailer-2.99.57.orig/proto/sm.conf.in zmailer-2.99.57/proto/sm.conf.in
+--- zmailer-2.99.57.orig/proto/sm.conf.in	2007-06-29 01:06:07.000000000 +0200
++++ zmailer-2.99.57/proto/sm.conf.in	2009-05-29 18:40:19.966076143 +0200
 @@ -9,17 +9,17 @@
  #
  # bitnet stuff F=hu not set?
@@ -91,8 +91,8 @@ diff -u -r zmailer-2.99.56.orig/proto/sm.conf.in zmailer-2.99.56/proto/sm.conf.i
 +#bsmtp3rfc	snmSX	/usr/local/funetnje/bmail	bmail -b $h $g $u
 +#bsmtp3nd	snmSX	/usr/local/funetnje/bmail	bmail -nd $h $g $u
 +#bsmtp3ndrfc	snmSX	/usr/local/funetnje/bmail	bmail -nd $h $g $u
-+#defrt1		snS	/usr/local/funetnje/bmail	bmail $g $u
-+#bitnet2	snS	/usr/local/funetnje/bmail	bmail $g $u
++#defrt1 		snS	/usr/local/funetnje/bmail	bmail $g $u
++#bitnet2		snS	/usr/local/funetnje/bmail	bmail $g $u
  #
  # the following entries are included to illustrate other possibilities
  #
@@ -102,21 +102,32 @@ diff -u -r zmailer-2.99.56.orig/proto/sm.conf.in zmailer-2.99.56/proto/sm.conf.i
  #		# CYRUS example from: Tom Samplonius <tom@sdf.com>
  procm	sSPfn	@PROCMAIL@	procmail -a $h -d $u
  #		# Procmail example from: Ken Pizzini <ken@spry.com>
-diff -u -r zmailer-2.99.56.orig/proto/smtpserver.conf.in zmailer-2.99.56/proto/smtpserver.conf.in
---- zmailer-2.99.56.orig/proto/smtpserver.conf.in	2003-08-29 11:55:06.000000000 +0200
-+++ zmailer-2.99.56/proto/smtpserver.conf.in	2004-01-31 23:51:49.000000000 +0100
-@@ -93,7 +93,7 @@
+diff -urN zmailer-2.99.57.orig/proto/smtpserver.conf.in zmailer-2.99.57/proto/smtpserver.conf.in
+--- zmailer-2.99.57.orig/proto/smtpserver.conf.in	2007-06-29 01:06:07.000000000 +0200
++++ zmailer-2.99.57/proto/smtpserver.conf.in	2009-05-29 18:46:16.006833818 +0200
+@@ -40,7 +40,7 @@
  #  %T  =  curtime string
  #  %X  =  xlatelang parameter
  #
 -#PARAM hdr220 %H ZMailer ESMTP-server %V running at Yoyodyne Propulsion Inc
-+PARAM hdr220 %H ZMailer ESMTP-server %V from PLD Linux Distribution
++PARAM hdr220 %H ZMailer ESMTP-server %V running at Yoyodyne Propulsion Inc
  #PARAM hdr220 %H ESMTP (NO UCE)(NO UBE) our local time is now %T
  #
  # Note above the "ESMTP" words are present because *some* MTA systems won't
-@@ -101,16 +101,16 @@
+@@ -48,18 +48,17 @@
  # "EHLO is to be done blindly, server responses are not to be studied for
  #  any possible 'ESMTP' keyword!"
+ #
++PARAM help =============================================================
++PARAM help    PLD Linux Distribution
++PARAM help
++PARAM help    http://www.pld-linux.org
++PARAM help    ftp://ftp.pld-linux.org
++PARAM help    feedback@pld-linux.org
++PARAM help
++PARAM help    Questions regarding our mail service should be sent via
++PARAM help    email to address <postmaster@OURDOMAIN>
++PARAM help =============================================================
  #
 -#PARAM help =============================================================
 -#PARAM help  This mail-server is at Yoyodyne Propulsion Inc.
@@ -128,32 +139,22 @@ diff -u -r zmailer-2.99.56.orig/proto/smtpserver.conf.in zmailer-2.99.56/proto/s
 -#PARAM help  email to address  <postmaster@OURDOMAIN>
 -#PARAM help  Reports about abuse are to be sent to: <abuse@OURDOMAIN>
 -#PARAM help =============================================================
-+PARAM help =============================================================
-+PARAM help    PLD Linux Distribution 
-+PARAM help    
-+PARAM help    http://www.pld-linux.org
-+PARAM help    ftp://ftp.pld-linux.org
-+PARAM help    feedback@pld-linux.org
-+PARAM help  
-+PARAM help    Questions regarding our mail service should be sent via
-+PARAM help    email to address <postmaster@OURDOMAIN>
-+PARAM help =============================================================
+-
+ # A load-balanced server cluster may want to communicate
+ # the ETRN request to cluster components, here is how:
+ # See also:  doc/guides/etrn-cluster
+@@ -349,7 +348,7 @@
+ #          depending on where the abort happened..
  #
- # Uncomment following for not to strip incoming addresses of format:
- # <@aa,@bb:cc@dd> into non-source-routed base form: <cc@dd>
-@@ -182,7 +182,7 @@
- #    but without that enable, those four flags have no effect.
- #
- #localhost           999 ftveR
--#some.host.domain    999 !NO EMAIL ACCEPTED FROM YOUR MACHINE
-+#.spam.net    999 !NO EMAIL ACCEPTED FROM YOUR MACHINE
+ #localhost           * ftveR
+-#some.host.domain    * !NO EMAIL ACCEPTED FROM YOUR MACHINE
++#.spam.net    * !NO EMAIL ACCEPTED FROM YOUR MACHINE
+ 
  # If the host presents itself as:  HELO [1.2.3.4], be lenient to it..
  # The syntax below is due to these patterns being SH-GLOB style patterns
- # where the brackets are special characters.
-Tylko w zmailer-2.99.56.orig/utils: zmailer.init.sh
-diff -u -r zmailer-2.99.56.orig/utils/zmailer.init.sh.in zmailer-2.99.56/utils/zmailer.init.sh.in
---- zmailer-2.99.56.orig/utils/zmailer.init.sh.in	2003-05-05 14:05:59.000000000 +0200
-+++ zmailer-2.99.56/utils/zmailer.init.sh.in	2004-01-31 23:51:49.000000000 +0100
+diff -urN zmailer-2.99.57.orig/utils/zmailer.init.sh.in zmailer-2.99.57/utils/zmailer.init.sh.in
+--- zmailer-2.99.57.orig/utils/zmailer.init.sh.in	2007-06-29 01:06:07.000000000 +0200
++++ zmailer-2.99.57/utils/zmailer.init.sh.in	2009-05-29 19:26:11.808163427 +0200
 @@ -1,7 +1,23 @@
 -#! /bin/sh
 +#!/bin/sh
@@ -161,8 +162,8 @@ diff -u -r zmailer-2.99.56.orig/utils/zmailer.init.sh.in zmailer-2.99.56/utils/z
 -### The basic   zmailer   script works also in SysV init environment.
 -### This isn't absolutely necessary.
 +#
-+# zmailer 	This shell script takes care of starting and stopping
-+#		zmailer
++# zmailer      This shell script takes care of starting and stopping
++#              zmailer
 +#
 +# chkconfig: 2345 80 30
 +# description: zmailer is a MTA, which is the program that moves mail \
@@ -192,23 +193,23 @@ diff -u -r zmailer-2.99.56.orig/utils/zmailer.init.sh.in zmailer-2.99.56/utils/z
 +		else
 +			deltext; fail
 +		fi
-+		
++
  	elif [ ${MAILSERVER-NONE} = NONE -a -x $MAILBIN/zmailer ]; then
 -		$MAILBIN/zmailer bootclean
 -		$MAILBIN/zmailer
 +		show "Starting ZMailer bootcleaning"; busy
-+                if $MAILBIN/zmailer bootclean > /dev/null 2>&1 ; then
-+                        deltext; ok
-+                else
-+                        deltext; fail
-+                fi
++		if $MAILBIN/zmailer bootclean > /dev/null 2>&1 ; then
++			deltext; ok
++		else
++			deltext; fail
++		fi
 +
 +		show Starting Zmailer main daemon; busy
-+                if $MAILBIN/zmailer > /dev/null 2>&1 ; then
-+                        deltext; ok
-+                else
-+                        deltext; fail
-+                fi
++		if $MAILBIN/zmailer > /dev/null 2>&1 ; then
++			deltext; ok
++		else
++			deltext; fail
++		fi
  	fi
  	touch /var/lock/subsys/zmailer
  	;;
@@ -217,11 +218,11 @@ diff -u -r zmailer-2.99.56.orig/utils/zmailer.init.sh.in zmailer-2.99.56/utils/z
  	if [ ${MAILSERVER-NONE} = NONE -a -x $MAILBIN/zmailer ]; then
 -		$MAILBIN/zmailer kill
 +		show Stopping ZMailer daemons; busy
-+                if $MAILBIN/zmailer kill > /dev/null 2>&1 ; then
-+                        deltext; ok
-+                else
-+                        deltext; fail
-+                fi
++		if $MAILBIN/zmailer kill > /dev/null 2>&1 ; then
++			deltext; ok
++		else
++			deltext; fail
++		fi
  	fi
  	rm -f /var/lock/subsys/zmailer
  	;;
