@@ -9,20 +9,18 @@
 Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl.UTF-8):	Bezpieczny MTA dla Wymagających Ekstremalnej Wydajności
 Name:		zmailer
-Version:	2.99.56
-Release:	9
+Version:	2.99.57
+Release:	1
 License:	GPL
 Group:		Networking/Daemons
 Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
-# Source0-md5:	c94cc0c2e2427a210a046a02ac4c2d50
+# Source0-md5:	abe451575234ac5ce79d9b950b150986
 Source1:	%{name}-pl.txt
 Source2:	forms-pl-0.4.tar.gz
 # Source2-md5:	c4ca963cd941e3ac533860d7d3d9f4b1
 Source3:	%{name}.logrotate
 Patch0:		%{name}-config.diff
-Patch1:		%{name}-ldap-lmap.patch
-Patch2:		%{name}-glibc.patch
-Patch3:		%{name}-sleepycatdb.patch
+Patch1:		%{name}-glibc.patch
 URL:		http://www.zmailer.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -91,9 +89,7 @@ statyczną ZMailera.
 %prep
 %setup -q -a2
 %patch0 -p1
-%patch1 -p0
-%patch2 -p1
-%patch3 -p1
+%patch1 -p1
 
 %build
 cp -f /usr/share/automake/config.* .
@@ -184,6 +180,14 @@ cp -f ./cf/SMTP+UUCP.cf router.cf
 # Remove unnecesary proto and bak files
 rm -rf `find $RPM_BUILD_ROOT -name proto`
 rm -rf `find $RPM_BUILD_ROOT -name bak`
+
+# Remove other trashes
+rm -r $RPM_BUILD_ROOT%{_sysconfdir}/mail/guides/
+rm $RPM_BUILD_ROOT%{perl_archlib}/perllocal.pod
+rm $RPM_BUILD_ROOT%{perl_sitearch}/auto/ZMailer/mailq/.packlist
+rm $RPM_BUILD_ROOT%{_sysconfdir}/mail/ChangeLog
+rm $RPM_BUILD_ROOT%{_prefix}/local/man/man3/ZMailer::mailq.3pm
+rm $RPM_BUILD_ROOT%{perl_sitelib}/ZMailer/mailq.pm
 
 # Install another files
 cat << EOF > $RPM_BUILD_ROOT/etc/cron.d/zmailer
