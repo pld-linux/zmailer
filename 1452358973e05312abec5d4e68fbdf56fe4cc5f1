@@ -1,0 +1,5 @@
+- release 1.0,
+- removed "Requires: smtpdaemon",
+- removed Conflicts with sendmail, qmail, postfix, exim, smail and added
+  with smtpdaemon,
+- some small cleanups.
