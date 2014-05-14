@@ -5,12 +5,12 @@
 %bcond_without	whoson	# build without WHOSON support
 %bcond_without	ldap	# build without LDAP support
 %bcond_without	gdbm	# build without GDBM support
-#
+
 Summary:	Secure Mailer for Extreme Performance Demands
 Summary(pl.UTF-8):	Bezpieczny MTA dla Wymagających Ekstremalnej Wydajności
 Name:		zmailer
 Version:	2.99.57
-Release:	1
+Release:	2
 License:	GPL
 Group:		Networking/Daemons
 Source0:	ftp://ftp.funet.fi/pub/unix/mail/zmailer/src/%{name}-%{version}.tar.gz
@@ -41,7 +41,7 @@ Requires(post):	textutils
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(pre):	grep
-Requires:	/etc/cron.d
+Requires:	crondaemon
 Requires:	logrotate >= 2.4
 Requires:	rc-scripts
 %{?with_whoson:Requires:	whoson >= 1.08}
@@ -133,8 +133,8 @@ install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
 	libdir=$RPM_BUILD_ROOT%{_libdir} \
 	includedir=$RPM_BUILD_ROOT%{_includedir}
 
-install	contrib/zmailcheck	$RPM_BUILD_ROOT%{_libdir}/zmailer/zmailcheck
-install	utils/zmailer.init.sh	$RPM_BUILD_ROOT/etc/rc.d/init.d/zmailer
+install	-p contrib/zmailcheck	$RPM_BUILD_ROOT%{_libdir}/zmailer/zmailcheck
+install	-p utils/zmailer.init.sh	$RPM_BUILD_ROOT/etc/rc.d/init.d/zmailer
 
 > $RPM_BUILD_ROOT%{_sysconfdir}/mail/mailname
 
@@ -159,7 +159,7 @@ mv -f $RPM_BUILD_ROOT%{_mandir}/man8/sm.8zm $RPM_BUILD_ROOT%{_mandir}/man8/sm-zm
 # Install Polish/English forms
 cd forms*
 cp -f forms/* $RPM_BUILD_ROOT%{_sysconfdir}/mail/forms/proto
-install vacation.msg $RPM_BUILD_ROOT%{_sysconfdir}/mail
+cp -p vacation.msg $RPM_BUILD_ROOT%{_sysconfdir}/mail
 
 # Install proto files
 cd $RPM_BUILD_ROOT%{_sysconfdir}/mail/proto
@@ -199,7 +199,7 @@ cat << EOF > $RPM_BUILD_ROOT/etc/cron.d/zmailer
 11 6,12,18,0 * * *	root	! %{_libdir}/zmailer/zmailcheck
 EOF
 
-install %{SOURCE3} $RPM_BUILD_ROOT/etc/logrotate.d/zmailer
+cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/logrotate.d/zmailer
 
 # postoffice tree (as created by proto/post-install.sh):
 install -d $RPM_BUILD_ROOT/var/spool/postoffice/{deferred,freezer,postman,public}
